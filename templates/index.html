@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>El principito con lda</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
 </head>
 <body>
 
-    <h1>Welcome to the Homepage</h1>
-    <p>This is a sample HTML template.</p>
+    <h1>Ejemplo del algortimo lda con el libro "el principito"</h1>
     
     <h1 id="saludo"> hola </h1>
 
-    <button id="click"> click</button>
+    <button id="click">Mostrar resutlados</button>
     <script src="{{url_for('static',filename='js/app.js')}}"></script>
 </body>
 </html>
