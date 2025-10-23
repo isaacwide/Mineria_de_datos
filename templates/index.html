@@ -1,19 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El principito con lda</title>
-     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-</head>
-<body>
-
-    <h1>Ejemplo del algortimo lda con el libro "el principito"</h1>
+    <title>El Principito con LDA</title>
     
-    <h1 id="saludo"> hola </h1>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- CSS personalizado adicional -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 min-h-screen">
+    
+    <!-- Contenedor principal -->
+    <div class="container mx-auto px-4 py-12">
+        
+        <!-- Header -->
+        <div class="text-center mb-12 animate-fade-in">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 drop-shadow-2xl">
+                Ejemplo del algoritmo LDA
+            </h1>
+            <p class="text-2xl text-purple-100 font-light">
+                con el libro <span class="font-semibold italic">"El Principito"</span>
+            </p>
+        </div>
 
-    <button id="click">Mostrar resutlados</button>
-    <script src="{{url_for('static',filename='js/app.js')}}"></script>
+        <!-- Card principal -->
+        <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:scale-[1.02] transition-transform duration-300">
+            
+            <!-- Banner decorativo -->
+            <div class="h-3 bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500"></div>
+            
+            <!-- Contenido de la card -->
+            <div class="p-8 md:p-12">
+                
+                <!-- Saludo -->
+                <div id="saludo" class="bg-gradient-to-r from-purple-100 to-indigo-100 rounded-2xl p-8 mb-8 text-center border-2 border-purple-300 shadow-md">
+                    <h2 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 mb-2">
+                        ¡Hola! 👋
+                    </h2>
+                    <p class="text-purple-700 text-lg">
+                        Bienvenido al análisis de tópicos con LDA
+                    </p>
+                </div>
+
+                <!-- Descripción -->
+                <div class="mb-8">
+                    <div class="flex items-start space-x-3 mb-4">
+                        <div class="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                                Análisis de Tópicos
+                            </h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                Este proyecto utiliza <span class="font-semibold text-purple-600">Latent Dirichlet Allocation (LDA)</span> 
+                                para descubrir los temas principales presentes en el texto de "El Principito". 
+                                El algoritmo identifica patrones de palabras que aparecen frecuentemente juntas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón principal -->
+                <div class="flex justify-center mb-8">
+                    <button id="click" 
+                            class="group relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 
+                                   text-white font-bold text-lg py-4 px-10 rounded-2xl shadow-xl 
+                                   hover:shadow-2xl transform hover:scale-105 
+                                   transition-all duration-300 ease-out">
+                        <span class="relative z-10 flex items-center space-x-2">
+                            <span>Mostrar Resultados</span>
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 
+                                    opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </button>
+                </div>
+
+                <!-- Sección de resultados (inicialmente oculta) -->
+                <div id="resultados" class="hidden opacity-0 transition-opacity duration-500">
+                    <div class="border-t-2 border-purple-200 pt-8">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                            <svg class="w-8 h-8 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            Tópicos Identificados
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Tópico 1 -->
+                            <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 border-2 border-purple-200 hover:border-purple-400 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-purple-800">Tópico 1: Amor y Cuidado</h4>
+                                    <span class="bg-purple-500 text-white text-xs font-semibold px-3 py-1 rounded-full">35%</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-white text-purple-700 text-sm px-3 py-1 rounded-full shadow-sm">rosa</span>
+                                    <span class="bg-white text-purple-700 text-sm px-3 py-1 rounded-full shadow-sm">planeta</span>
+                                    <span class="bg-white text-purple-700 text-sm px-3 py-1 rounded-full shadow-sm">amor</span>
+                                    <span class="bg-white text-purple-700 text-sm px-3 py-1 rounded-full shadow-sm">cuidar</span>
+                                </div>
+                            </div>
+
+                            <!-- Tópico 2 -->
+                            <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-6 border-2 border-indigo-200 hover:border-indigo-400 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-indigo-800">Tópico 2: Amistad</h4>
+                                    <span class="bg-indigo-500 text-white text-xs font-semibold px-3 py-1 rounded-full">28%</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-white text-indigo-700 text-sm px-3 py-1 rounded-full shadow-sm">zorro</span>
+                                    <span class="bg-white text-indigo-700 text-sm px-3 py-1 rounded-full shadow-sm">domesticar</span>
+                                    <span class="bg-white text-indigo-700 text-sm px-3 py-1 rounded-full shadow-sm">lazo</span>
+                                    <span class="bg-white text-indigo-700 text-sm px-3 py-1 rounded-full shadow-sm">único</span>
+                                </div>
+                            </div>
+
+                            <!-- Tópico 3 -->
+                            <div class="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-6 border-2 border-pink-200 hover:border-pink-400 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-pink-800">Tópico 3: Viaje</h4>
+                                    <span class="bg-pink-500 text-white text-xs font-semibold px-3 py-1 rounded-full">22%</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-white text-pink-700 text-sm px-3 py-1 rounded-full shadow-sm">asteroide</span>
+                                    <span class="bg-white text-pink-700 text-sm px-3 py-1 rounded-full shadow-sm">viajar</span>
+                                    <span class="bg-white text-pink-700 text-sm px-3 py-1 rounded-full shadow-sm">estrellas</span>
+                                    <span class="bg-white text-pink-700 text-sm px-3 py-1 rounded-full shadow-sm">desierto</span>
+                                </div>
+                            </div>
+
+                            <!-- Tópico 4 -->
+                            <div class="bg-gradient-to-br from-purple-50 to-pink-100 rounded-xl p-6 border-2 border-purple-200 hover:border-purple-400 transition-colors">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="text-lg font-bold text-purple-800">Tópico 4: Reflexión</h4>
+                                    <span class="bg-purple-500 text-white text-xs font-semibold px-3 py-1 rounded-full">15%</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="bg-white text-purple-700 text-sm px-3 py-1 rounded-full shadow-sm">adultos</span>
+                                    <span class="bg-white text-purple-700 text-sm px-3 py-1 rounded-full shadow-sm">comprender</span>
+                                    <span class="bg-white text-purple-700 text-sm px-3 py-1 rounded-full shadow-sm">esencial</span>
+                                    <span class="bg-white text-purple-700 text-sm px-3 py-1 rounded-full shadow-sm">invisible</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-12">
+            <p class="text-white/80 text-lg">
+                💡 <span class="font-semibold">Lo esencial es invisible a los ojos</span>
+            </p>
+            <p class="text-white/60 mt-2">
+                Proyecto de Minería de Datos - 2025
+            </p>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>

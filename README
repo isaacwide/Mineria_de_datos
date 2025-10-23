@@ -1,0 +1,11 @@
+ pip install -r requirements.txt
+
+
+ Compilar el archivo c
+  C:\msys64\mingw64\bin\gcc.exe -shared -o c_libs/build/lid_lda.dll c_libs/src/operations.c -Wall -O2
+
+  crear el venv
+  python -m venn nombredelawea
+  
+  nombredelawea\Scripts\activate
+  

@@ -7,6 +7,8 @@
 float numeros_aleatorios();
 int es_delimitador(char *palabra);
 
+
+// Función para verificar si una palabra es un delimitador y funcion para numeros random
 int es_delimitador(char *palabra) {
     // Delimitadores exactos
     const char *delims[] = {
@@ -31,6 +33,10 @@ int es_delimitador(char *palabra) {
     }
     return 0;
 }
+float numeros_aleatorios() {
+    return (float)rand() / RAND_MAX;
+}
+
 
 __declspec(dllexport) void word_in_topic(char *filename1, char *filename2) {
     FILE *file1 = fopen(filename1, "r");
@@ -138,7 +144,6 @@ __declspec(dllexport)void dic_in_topic(char *filename2, char *filename3) {
             }
         }
     }
-
    FILE *out2 = fopen("matriz2.txt","w");
         if (out2 == NULL) {
             printf("Error al abrir matriz2.txt para escritura\n");
@@ -150,15 +155,10 @@ __declspec(dllexport)void dic_in_topic(char *filename2, char *filename3) {
 
         printf("\nMatriz mtx_2 (asignacion de topico por palabra del diccionario):\n");
         for (int i = 0; i < num_palabras_dic; i++) {
-            fprintf(out2,"Palabra %4d (%s):\n", i + 1, diccionario[i]);  // Corregido aquí
             for (int j = 0; j < 300; j++) {
                 fprintf(out2,"%d ", mtx_2[i][j]);
             }
             fprintf(out2,"\n");  // Salto de línea después de cada fila
         }
         fclose(out2);
-}
-
-float numeros_aleatorios() {
-    return (float)rand() / RAND_MAX;
 }
