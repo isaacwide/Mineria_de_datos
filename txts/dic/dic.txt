@@ -1,4 +1,3 @@
-DOCUMENT1
 el
 Principito
 Por
@@ -14,17 +13,12 @@ NIÑO
 Leon
 Werth
 Enseñé
-mi
 obra
-de
 arte
-a
 persona
 mayor
-y
 él
 preguntar
-si
 dibujo
 dar
 miedo
@@ -39,11 +33,9 @@ no
 representar
 serpiente
 boa
-que
 digiere
 elefante
 Dibujé
-entonces
 interior
 fin
 poder
@@ -56,7 +48,6 @@ explicación
 número
 2
 ser
-así
 II
 favor
 píntamar
@@ -74,7 +65,6 @@ hacer
 tú
 aquí
 suavemente
-como
 algo
 mucho
 importante
@@ -147,7 +137,6 @@ Y
 conocí
 al
 principito
-III
 cosa
 ese
 volar
@@ -174,7 +163,6 @@ desgracia
 tomar
 serio
 añadir
-también
 vién
 planeta
 Divisé
@@ -184,7 +172,6 @@ su
 presencia
 bruscamente
 Tu
-pues
 mover
 lentamente
 cabeza
@@ -195,9 +182,7 @@ venir
 lejos
 hundir
 ensueño
-durante
 largo
-luego
 sacar
 bolsillo
 abismó
@@ -206,7 +191,6 @@ tesoro
 Imagínense
 intrigar
 semiconfidencia
-sobre
 esforcé
 saber
 más
@@ -215,7 +199,6 @@ muchachito
 tu
 casa
 llevarte
-después
 meditar
 silenciosamente
 bueno
@@ -233,7 +216,6 @@ parecer
 chocar
 idea
 raro
-document2
 Si
 ata
 ir
@@ -251,7 +233,6 @@ gravedad
 quizás
 poco
 melancolía
-IV
 manera
 segundo
 origen
@@ -269,13 +250,11 @@ envejecer
 gracia
 preocupado
 profundo
-cuando
 verdad
 comen
 arbusto
 contesto
 comer
-pero
 Baobabs
 rebaño
 reír
@@ -283,12 +262,10 @@ Habría
 poner
 juiciosamente
 baobabs
-antes
 crecer
 pequeñito
 quier
 comar
-VI
 ido
 vida
 gustar
@@ -316,7 +293,6 @@ verdaderamente
 triste
 viste
 estabar
-vii
 flor
 encontrar
 espina
@@ -343,7 +319,6 @@ mano
 dedo
 lleno
 grasa
-e
 inclinado
 feo
 Hablas
@@ -364,7 +339,6 @@ enrojeceír
 continuar
 estallar
 sollozo
-DOCUMENT3
 VIII
 belleza
 abrigo
@@ -401,7 +375,6 @@ cuatro
 tigre
 garra
 observar
-además
 Perdóname
 temer
 corriente
@@ -416,7 +389,6 @@ fanal
 frío
 gusto
 allá
-donde
 Iba
 buscar él
 dejaba
@@ -432,11 +404,9 @@ molestar
 enternecer yo
 contar
 todavía
-IX
 Adiós
 repetir
 tosió
-porque
 resfriado
 tonto
 Procura
@@ -504,7 +474,6 @@ año
 nadie
 bostezo
 bosteza
-document4
 vergüenza
 gana
 enrojeceir
@@ -552,7 +521,6 @@ pregunta
 formular
 Tendrás
 exigiré
-según
 dictar
 ciencia
 gobernante
@@ -600,19 +568,16 @@ embajador
 aspecto
 autoridad
 extraña
-XI
 vanidoso
 admirador
 visitar yo
 demá
-document5
 Buenos
 saludar
 aclamar
 desgraciadamente
 pasar
 Golpea
-contra
 aconsejar
 aplaudir
 levantar
@@ -638,7 +603,6 @@ admíramar
 encoger él
 hombro
 decididamente
-xii
 tercer
 bebedor
 visita
@@ -666,7 +630,6 @@ definitivamente
 perplejo
 menor
 seguir
-xiii
 cigarro
 apagar
 sumar
@@ -674,7 +637,6 @@ quinientos
 millón
 seisciento
 veintidós
-mil
 seteciento
 treinta
 formulado
@@ -702,12 +664,10 @@ reyes
 poseer
 Reinan
 diferente
-document6
 comprar
 alguien
 descubrir
 razona
-o
 borracho
 obstante
 punzante
@@ -725,12 +685,10 @@ escribir
 papel
 estrellas
 guardo
-bajo
 llave
 cajón
 suficiente
 divertido
-incluso
 bastante
 poético
 abrir
@@ -739,7 +697,6 @@ respuesta
 abandonar
 extraordinaria
 sencillez
-XIV
 llegar
 respetuosamente
 farolero
@@ -781,12 +738,10 @@ haber yo
 hecho
 lugar
 dos
-xv
 sexto
 diez
 anciano
 libro
-document7
 Anda
 explorador
 mesa
@@ -844,10 +799,8 @@ próximamente
 Indudablemente
 visitar
 Tierra
-xvi
 séptimo
 consiguiente
-xvii
 África
 piedra
 elevar
@@ -856,13 +809,11 @@ problema
 callar
 afirmar
 rato
-document8
 Eres
 bicho
 delgado
 poderoso
 parez
-ni
 siquiera
 tién
 patas
@@ -883,23 +834,19 @@ ayudarte
 habla
 enigma
 resuelvo
-xviii
 atravesar
 pétalo
 cortésmente
 caraván
-xix
 acaso
 eco
 Sed
-xx
 jardín
 cuajado
 rosas
 rosa
 todas
 Quiénes
-xxi
 aparecer
 zorro
 manzano
@@ -928,7 +875,6 @@ gallina
 perfecto
 suspirar
 domestícamar
-document9
 He
 deber
 siguiente
@@ -962,7 +908,6 @@ invisible
 acordar él
 recordar él
 responsable
-xxii
 guardavía
 haz
 Formo
@@ -1000,7 +945,6 @@ niño
 aplastar
 nariz
 vidrio
-XXIII
 comerciante
 píldora
 perfeccionado
@@ -1016,14 +960,12 @@ cincuenta
 disponer
 caminar
 fuente
-xxiv
 octavo
 avería
 escuchar
 último
 gota
 provisión
-document10
 tratar
 morir
 razonamiento
@@ -1069,7 +1011,6 @@ Continué
 rayar
 alba
 descubrí
-XXV
 metar
 valer
 pena
@@ -1092,10 +1033,8 @@ cultivar
 respondí
 encontrar él
 ciego
-document11
 miel
 gozar
-hasta
 sentir yo
 dichoso
 cumpla
@@ -1132,7 +1071,6 @@ añadí
 vacilante
 aniversario
 ruborizar
-aunque
 rubor
 afirmativo
 vuelve
@@ -1140,7 +1078,6 @@ máquina
 Vuelve
 acordar
 exponer
-xxvi
 acuerda
 exactitud
 Alguien
@@ -1178,11 +1115,9 @@ comunicar él
 pesar
 lograr
 trabajo
-sino
 hoy
 perdido
 lejanía
-document12
 sonreir
 melancólicamente
 Esperé
@@ -1243,7 +1178,6 @@ inocente
 defender él
 mantener yo
 pie
-document13
 Vaciló
 instante
 moverme
@@ -1255,7 +1189,6 @@ exhalar
 grito
 árbol
 ruido
-xxvii
 sucedido
 pregúntense
 veréis
