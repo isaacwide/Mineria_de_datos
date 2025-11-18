@@ -8,17 +8,29 @@ document.addEventListener('DOMContentLoaded', function() {
             botonMostrar.disabled = true;
             botonMostrar.innerHTML = '<span>Cargando...</span>';
             
-            // Obtener datos del servidor
-            const response = await fetch('/api/matrices');
-            const data = await response.json();
+            // Obtener AMBAS matrices
+            const [response1, response2] = await Promise.all([
+                fetch('/api/matrices'),
+                fetch('/api/matrizFinal?repeticiones=300')
+            ]);
             
-            if (data.error) {
-                alert('Error: ' + data.error);
+            const data1 = await response1.json();
+            const data2 = await response2.json();
+            
+            if (data1.error || data2.error) {
+                alert('Error: ' + (data1.error || data2.error));
                 return;
             }
             
+            // Combinar los datos
+            const dataCombinada = {
+                matriz_1: data1.matriz_1,
+                matriz_2: data1.matriz_2,
+                matriz_final: data2  // La matriz iterada
+            };
+            
             // Mostrar resultados
-            mostrarMatrices(data);
+            mostrarMatrices(dataCombinada);
             
             // Animar aparición
             resultadosDiv.classList.remove('hidden');
@@ -66,13 +78,28 @@ function mostrarMatrices(data) {
             <!-- Matriz 2 -->
             <div class="mb-8 bg-gradient-to-br from-indigo-50 to-pink-50 rounded-xl p-6 border-2 border-indigo-200">
                 <h4 class="text-xl font-bold text-indigo-800 mb-4">
-                    ${data.matriz_2.descripcion} aun falla jajajaaj pero si manda la info 
+                    ${data.matriz_2.descripcion}
                 </h4>
                 <p class="text-gray-600 mb-4">
                     Dimensiones: ${data.matriz_2.shape[0]} palabras × ${data.matriz_2.shape[1]} tópicos
                 </p>
                 <div class="overflow-x-auto">
                     ${generarTablaMatriz(data.matriz_2.datos.slice(0, 20), 'Palabra', 'Tópico', true)}
+                </div>
+            </div>
+
+            <!-- Matriz Final (Iterada) -->
+            <div class="mb-8 bg-gradient-to-br from-green-50 to-teal-50 rounded-xl p-6 border-2 border-green-200">
+                <h4 class="text-xl font-bold text-green-800 mb-4">
+                    ${data.matriz_final.descripcion}
+                </h4>
+                <p class="text-gray-600 mb-4">
+                    Dimensiones: ${data.matriz_final.shape[0]} documentos × ${data.matriz_final.shape[1]} tópicos
+                    <br>
+                    <span class="text-purple-600 font-semibold">Iteraciones: ${data.matriz_final.repeticiones}</span>
+                </p>
+                <div class="overflow-x-auto">
+                    ${generarTablaMatriz(data.matriz_final.datos, 'Documento', 'Tópico')}
                 </div>
             </div>
         </div>
