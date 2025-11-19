@@ -55,6 +55,12 @@ def get_final():
     print(f"Recibida petición para {repeticiones} repeticiones")
     
     # Verificar que los punteros existan
+    global matriz_1, matriz_2, apuntado, apuntado_2
+    if apuntado is None or apuntado_2 is None:
+        print ("Punteros vacios. Recalclando matrices...")
+        matriz_1, apuntado = c_interface.matriz_topic_word(filename1, filename2, documentos, temas)
+        matriz_2, apuntado_2 = c_interface.matriz_dic_topic(filename1, filename3, diccionario, temas)
+    
     if apuntado is None or apuntado_2 is None:
         return jsonify({"error": "Las matrices base no están disponibles"}), 500
     

@@ -8,10 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
             botonMostrar.disabled = true;
             botonMostrar.innerHTML = '<span>Cargando...</span>';
             
+            const Iteraciones = document.getElementById('iteraciones').value;
             // Obtener AMBAS matrices
             const [response1, response2] = await Promise.all([
                 fetch('/api/matrices'),
-                fetch('/api/matrizFinal?repeticiones=300')
+                fetch('/api/matrizFinal?repeticiones=${Iteraciones}')
             ]);
             
             const data1 = await response1.json();
