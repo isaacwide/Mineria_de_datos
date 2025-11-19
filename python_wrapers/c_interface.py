@@ -102,3 +102,21 @@ def liberar_matrices(m1, m2, filas_m1, filas_m2):
         free_matrix(m2, filas_m2)
     
     print("Memoria liberada")
+
+
+def param_sigma(mtx):
+    sigma = lib.parametro_sigma
+    sigma.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_float))
+    sigma.argtypes = ctypes.POINTER(ctypes.POINTER(ctypes.c_float))
+
+    resultado_sigma = sigma(mtx)
+
+    if sigma is None :
+        print("error al obtener la matriz")
+        return None
+    matriz = np.zeros((1063,50), dtype=np.float32)
+    for i in range(1063):
+            for j in range(50):
+                matriz[i][j] = resultado_sigma[i][j]
+
+    return resultado_sigma

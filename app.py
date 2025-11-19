@@ -18,6 +18,8 @@ print("Calculando matrices iniciales...")
 matriz_1, apuntado = c_interface.matriz_topic_word(filename1, filename2, documentos, temas)
 matriz_2, apuntado_2 = c_interface.matriz_dic_topic(filename1, filename3, diccionario, temas)
 
+matriz_sigma = c_interface.param_sigma(apuntado_2)
+
 print("Matriz 1 shape:", matriz_1.shape if matriz_1 is not None else "None")
 print("Matriz 2 shape:", matriz_2.shape if matriz_2 is not None else "None")
 
