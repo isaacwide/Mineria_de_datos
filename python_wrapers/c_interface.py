@@ -107,7 +107,7 @@ def liberar_matrices(m1, m2, filas_m1, filas_m2):
 def param_sigma(mtx):
     sigma = lib.parametro_sigma
     sigma.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_float))
-    sigma.argtypes = ctypes.POINTER(ctypes.POINTER(ctypes.c_float))
+    sigma.argtypes =[ctypes.POINTER(ctypes.POINTER(ctypes.c_float))] 
 
     resultado_sigma = sigma(mtx)
 
