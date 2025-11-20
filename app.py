@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request
 import os 
 from python_wrapers import c_interface
+from python_wrapers.lda_metrics import calcular_frecuencias_documento_palabra, calcular_entropia, calcular_perplexity
 import numpy as np
 
 app = Flask(__name__)
@@ -31,6 +32,11 @@ else:
 
 print("Matriz 1 shape:", matriz_1.shape if matriz_1 is not None else "None")
 print("Matriz 2 shape:", matriz_2.shape if matriz_2 is not None else "None")
+
+# Calcular frecuencias documento-palabra para métricas de entropía
+print("Calculando frecuencias documento-palabra...")
+n_dv = calcular_frecuencias_documento_palabra(filename1, filename3, documentos, diccionario)
+print("Matriz de frecuencias shape:", n_dv.shape)
 
 class palabraProbabilidad:
     def __init__(self, palabra, probabilidad):  # ✓ Solo 2 parámetros
@@ -177,6 +183,75 @@ def calcular_palabras_sigma():
         "palabras_por_topico": 20
     })
 
+
+
+
+
+@app.route("/api/entropia", methods=["GET"])
+def get_entropia():
+    """Endpoint para calcular la entropía del modelo"""
+    try:
+        theta = matriz_1 / np.sum(matriz_1, axis=1, keepdims=True)
+        phi = matriz_2 / np.sum(matriz_2, axis=1, keepdims=True)
+        entropia = calcular_entropia(theta, phi, n_dv)
+    
+        perplexity = calcular_perplexity(entropia)
+        
+        return jsonify({
+            "entropia": float(entropia),
+            "perplexity": float(perplexity),
+            "descripcion": "Métricas del modelo LDA"
+        })
+    
+    except Exception as e:
+        print(f"Error en get_entropia: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/entropia-final", methods=["GET"])
+def get_entropia_final():
+    """Endpoint para calcular la entropía de la matriz iterada"""
+    try:
+        repeticiones = request.args.get('repeticiones', default=100, type=int)
+        
+        # Verificar punteros
+        global matriz_1, matriz_2, apuntado, apuntado_2
+        if apuntado is None or apuntado_2 is None:
+            print("Punteros vacios. Recalculando matrices...")
+            matriz_1, apuntado = c_interface.matriz_topic_word(filename1, filename2, documentos, temas)
+            matriz_2, apuntado_2 = c_interface.matriz_dic_topic(filename1, filename3, diccionario, temas)
+        
+        if apuntado is None or apuntado_2 is None:
+            return jsonify({"error": "Las matrices base no están disponibles"}), 500
+        
+        #Calcular matriz final iterada
+        matrizFinal = c_interface.calcular_matriz_final(apuntado, apuntado_2, repeticiones)
+        
+        if matrizFinal is None:
+            return jsonify({"error": "No se pudo calcular la matriz iterada"}), 500
+        
+        # Normalizar theta (documento-tópico)
+        theta = matrizFinal / np.sum(matrizFinal, axis=1, keepdims=True)
+        
+        # Normalizar phi (palabra-tópico)
+        phi = matriz_2 / np.sum(matriz_2, axis=1, keepdims=True)
+        
+        # Calcular entropía
+        entropia = calcular_entropia(theta, phi, n_dv)
+        
+        # Calcular perplejidad
+        perplexity = calcular_perplexity(entropia)
+        
+        return jsonify({
+            "entropia": float(entropia),
+            "perplexity": float(perplexity),
+            "repeticiones": repeticiones,
+            "descripcion": f"Métricas del modelo LDA iterado {repeticiones} veces"
+        })
+    
+    except Exception as e:
+        print(f"Error en get_entropia_final: {e}")
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/api/liberar", methods=["POST"])

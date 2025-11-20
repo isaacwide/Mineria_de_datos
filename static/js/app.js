@@ -18,19 +18,21 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const Iteraciones = document.getElementById('iteraciones').value;
             
-            // Obtener TODAS las matrices incluyendo tópicos
-            const [response1, response2, response3] = await Promise.all([
+            // Obtener TODAS las matrices incluyendo tópicos y métricas de entropía
+            const [response1, response2, response3, response4] = await Promise.all([
                 fetch('/api/matrices'),
                 fetch(`/api/matrizFinal?repeticiones=${Iteraciones}`),
-                fetch('/api/topicosfinal')
+                fetch('/api/topicosfinal'),
+                fetch(`/api/entropia-final?repeticiones=${Iteraciones}`)
             ]);
             
             const data1 = await response1.json();
             const data2 = await response2.json();
             const data3 = await response3.json();
+            const data4 = await response4.json();
             
-            if (data1.error || data2.error || data3.error) {
-                alert('Error: ' + (data1.error || data2.error || data3.error));
+            if (data1.error || data2.error || data3.error || data4.error) {
+                alert('Error: ' + (data1.error || data2.error || data3.error || data4.error));
                 return;
             }
             
@@ -39,7 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 matriz_1: data1.matriz_1,
                 matriz_2: data1.matriz_2,
                 matriz_final: data2,
-                topicos: data3
+                topicos: data3,
+                metricas: data4
             };
             
             // Mostrar resultados
@@ -78,9 +81,32 @@ function mostrarMatrices(data) {
                 </svg>
                 Resultados del Análisis LDA
             </h3>
+
+            <!-- Métricas del Modelo -->
+            <div class="mb-8 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl p-6 border-2 border-yellow-300 animate-fade-in">
+                <h4 class="text-xl font-bold text-orange-800 mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                    Métricas del Modelo
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                        <p class="text-sm text-gray-600 mb-1">Entropía</p>
+                        <p class="text-2xl font-bold text-orange-700">${data.metricas.entropia.toFixed(6)}</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-4 shadow-sm">
+                        <p class="text-sm text-gray-600 mb-1">Perplejidad</p>
+                        <p class="text-2xl font-bold text-orange-700">${data.metricas.perplexity.toFixed(2)}</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 text-sm mt-3">
+                    Iteraciones: ${data.metricas.repeticiones} | La perplejidad más baja indica mejor ajuste del modelo
+                </p>
+            </div>
             
             <!-- Tópicos Identificados -->
-            <div class="mb-8 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl p-6 border-2 border-yellow-200 animate-slide-up">
+            <div class="mb-8 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl p-6 border-2 border-yellow-200 animate-slide-up" style="animation-delay: 0.1s;">
                 <h4 class="text-2xl font-bold text-orange-800 mb-6 flex items-center">
                     <svg class="w-7 h-7 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
@@ -94,7 +120,7 @@ function mostrarMatrices(data) {
             </div>
 
             <!-- Matriz 1 -->
-            <div class="mb-8 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 border-2 border-purple-200 animate-slide-up" style="animation-delay: 0.1s;">
+            <div class="mb-8 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 border-2 border-purple-200 animate-slide-up" style="animation-delay: 0.2s;">
                 <h4 class="text-xl font-bold text-purple-800 mb-4">
                     ${data.matriz_1.descripcion}
                 </h4>
@@ -107,7 +133,7 @@ function mostrarMatrices(data) {
             </div>
             
             <!-- Matriz 2 -->
-            <div class="mb-8 bg-gradient-to-br from-indigo-50 to-pink-50 rounded-xl p-6 border-2 border-indigo-200 animate-slide-up" style="animation-delay: 0.2s;">
+            <div class="mb-8 bg-gradient-to-br from-indigo-50 to-pink-50 rounded-xl p-6 border-2 border-indigo-200 animate-slide-up" style="animation-delay: 0.3s;">
                 <h4 class="text-xl font-bold text-indigo-800 mb-4">
                     ${data.matriz_2.descripcion}
                 </h4>
@@ -120,7 +146,7 @@ function mostrarMatrices(data) {
             </div>
 
             <!-- Matriz Final -->
-            <div class="mb-8 bg-gradient-to-br from-green-50 to-teal-50 rounded-xl p-6 border-2 border-green-200 animate-slide-up" style="animation-delay: 0.3s;">
+            <div class="mb-8 bg-gradient-to-br from-green-50 to-teal-50 rounded-xl p-6 border-2 border-green-200 animate-slide-up" style="animation-delay: 0.4s;">
                 <h4 class="text-xl font-bold text-green-800 mb-4">
                     ${data.matriz_final.descripcion}
                 </h4>
