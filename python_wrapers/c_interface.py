@@ -104,19 +104,34 @@ def liberar_matrices(m1, m2, filas_m1, filas_m2):
     print("Memoria liberada")
 
 
-def param_sigma(mtx):
-    sigma = lib.parametro_sigma
-    sigma.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_float))
-    sigma.argtypes =[ctypes.POINTER(ctypes.POINTER(ctypes.c_float))] 
+def param_sigma(mtx, filas=1063, columnas=50):
+    parametro_sigma = lib.parametro_sigma
+    parametro_sigma.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_float))
+    parametro_sigma.argtypes = [ctypes.POINTER(ctypes.POINTER(ctypes.c_float))] 
 
-    resultado_sigma = sigma(mtx)
+    print(f"Llamando a parametro_sigma con matriz {filas}x{columnas}...")
+    resultado_sigma = parametro_sigma(mtx)
 
-    if sigma is None :
-        print("error al obtener la matriz")
+    # Verificar correctamente el resultado
+    if not resultado_sigma:
+        print("Error: parametro_sigma retornó NULL")
         return None
-    matriz = np.zeros((1063,50), dtype=np.float32)
-    for i in range(1063):
-            for j in range(50):
+    
+    try:
+        # Crear la matriz numpy
+        matriz = np.zeros((filas, columnas), dtype=np.float32)
+        
+        # Copiar datos con manejo de errores
+        for i in range(filas):
+            if not resultado_sigma[i]:
+                print(f"Error: fila {i} es NULL")
+                return None
+            for j in range(columnas):
                 matriz[i][j] = resultado_sigma[i][j]
-
-    return resultado_sigma
+        
+        print(f"Matriz sigma calculada exitosamente: {matriz.shape}")
+        return resultado_sigma, matriz
+        
+    except Exception as e:
+        print(f"Error al copiar datos de sigma: {e}")
+        return None
