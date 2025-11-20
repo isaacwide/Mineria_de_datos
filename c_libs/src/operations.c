@@ -4,7 +4,7 @@
 #include<time.h>
 
 #define documentos 13
-#define temas 50
+#define temas 10
 #define palabras_dic 1063
 #define betha 1.0
 #define alfa 0.01
