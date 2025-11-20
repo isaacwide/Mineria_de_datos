@@ -18,10 +18,27 @@ print("Calculando matrices iniciales...")
 matriz_1, apuntado = c_interface.matriz_topic_word(filename1, filename2, documentos, temas)
 matriz_2, apuntado_2 = c_interface.matriz_dic_topic(filename1, filename3, diccionario, temas)
 
-matriz_sigma = c_interface.param_sigma(apuntado_2)
+# sigma será [1063][50] (palabras × temas)
+print("Calculando matriz sigma...")
+resultado = c_interface.param_sigma(apuntado_2)
+if resultado:
+    apuntado_sigma, matriz_sigma = resultado
+    print("Matriz sigma shape:", matriz_sigma.shape)  # Debe ser (1063, 50)
+else:
+    print("Error al calcular matriz sigma")
+    apuntado_sigma = None
+    matriz_sigma = None
 
 print("Matriz 1 shape:", matriz_1.shape if matriz_1 is not None else "None")
 print("Matriz 2 shape:", matriz_2.shape if matriz_2 is not None else "None")
+
+class palabraProbabilidad:
+    def __init__(self, palabra, probabilidad):  # ✓ Solo 2 parámetros
+        self.palabra = palabra
+        self.probabilidad = probabilidad
+    
+    def __repr__(self):
+        return f"{self.palabra}: {self.probabilidad:.4f}"
 
 
 @app.route("/", methods=["GET"])
@@ -82,6 +99,84 @@ def get_final():
     except Exception as e:
         print(f"Error en get_final: {e}")
         return jsonify({"error": str(e)}), 500
+    
+
+@app.route("/api/topicosfinal", methods=["GET"])
+def calcular_palabras_sigma():
+    """Calcula las top 20 palabras por tópico"""
+    
+    # 1. Cargar diccionario
+    dic = []
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    ruta_txt = os.path.join(base_dir, "txts/dic", "dic.txt")
+
+    # 2. Cargar nombres de tópicos
+    nombres_temas = []  # ✓ Cambiar nombre para evitar conflicto
+    direccion = os.path.dirname(os.path.abspath(__file__))
+    ruta_temas = os.path.join(direccion, "txts/temas", "topicos.txt")
+    
+    try:
+        with open(ruta_txt, "r", encoding="utf-8") as f:
+            for linea in f:
+                palabra = linea.strip()
+                if palabra:  
+                    dic.append(palabra)
+
+        with open(ruta_temas, "r", encoding="utf-8") as f:
+            for linea in f:
+                nombre = linea.strip()
+                if nombre:
+                    nombres_temas.append(nombre)
+                    
+    except FileNotFoundError as e:
+        return jsonify({"error": f"No se encuentra el archivo: {e.filename}"}), 500
+    
+    # 3. Verificar que matriz_sigma existe
+    if matriz_sigma is None:
+        return jsonify({"error": "Matriz sigma no calculada"}), 500
+    
+    # 4. Procesar cada tópico
+    todos_topicos = []
+    
+    for p in range(temas):  # ✓ temas es la variable global (50)
+        topico_n = []
+        
+        # Crear objeto para cada palabra en este tópico
+        for i in range(len(dic)):
+            palabras_ordenadas = palabraProbabilidad(dic[i], matriz_sigma[i][p])  
+            topico_n.append(palabras_ordenadas)
+        
+        # Ordenar por probabilidad (mayor a menor)
+        topico_ordenado = sorted(topico_n, key=lambda x: x.probabilidad, reverse=True)
+        
+        # Obtener top 20
+        top_20 = topico_ordenado[:20]
+        
+        # Convertir objetos a diccionarios para JSON
+        top_20_dict = [
+            {
+                "palabra": obj.palabra,
+                "probabilidad": float(obj.probabilidad)
+            }
+            for obj in top_20
+        ]
+        
+       
+        nombre_topico = nombres_temas[p] if p < len(nombres_temas) else f"Tópico {p}"
+        
+        todos_topicos.append({
+            "topico": p,
+            "nombre": nombre_topico, 
+            "top_palabras": top_20_dict
+        })
+    
+    # 5. Retornar JSON
+    return jsonify({
+        "topicos": todos_topicos,
+        "num_topicos": temas,  
+        "palabras_por_topico": 20
+    })
+
 
 
 @app.route("/api/liberar", methods=["POST"])
@@ -92,8 +187,7 @@ def liberar_memoria():
         return jsonify({"mensaje": "Memoria liberada exitosamente"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
+    
 if __name__ == "__main__":
     try:
         app.run(debug=True)

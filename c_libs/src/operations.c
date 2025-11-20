@@ -194,32 +194,37 @@ __declspec(dllexport) float** parametro_sigma(float **mtx_2){
         printf("Error: mtx_2 es NULL\n");
         return NULL;
     }
-    // Calcular n_k para TODAS las palabras
-    float * n_k = n_ks(mtx_2);
     
-    // Asignar memoria para sigma
+    // mtx_2 es [temas][palabras_dic] = [50][1063]
+    // Calcular n_k: suma de cada TÓPICO (fila) a través de todas las palabras
+    float *n_k = n_ks(mtx_2);  // Esto ya está correcto, retorna array de 50 elementos
+    
+    // Asignar memoria para sigma [palabras_dic][temas] = [1063][50]
+    // Nota: Sigma tendrá dimensiones TRANSPUESTAS a mtx_2
     float **sigma = (float**)malloc(palabras_dic * sizeof(float*));
     for(int i = 0; i < palabras_dic; i++){
         sigma[i] = (float*)calloc(temas, sizeof(float));
     }
-    // Calcular sigma
-    for(int k = 0; k < palabras_dic; k++){
-        for(int t = 0; t < temas; t++){
-            float a = mtx_2[k][t] + betha;
-            float b = n_k[k] + (betha * palabras_dic); // Usar temas, que es 50
+    
+    // Calcular sigma: para cada palabra del diccionario y cada tópico
+    for(int w = 0; w < palabras_dic; w++){          // w = índice de palabra
+        for(int t = 0; t < temas; t++){              // t = índice de tópico
+            // Acceder a mtx_2 correctamente: mtx_2[tópico][palabra]
+            float a = mtx_2[t][w] + betha;           // ✓ mtx_2[t][w] es correcto
+            float b = n_k[t] + (betha * palabras_dic); // ✓ n_k[t] suma del tópico t
             
             if (b > 0) {
-                sigma[k][t] = a / b;
+                sigma[w][t] = a / b;  // P(palabra_w | tópico_t)
             } else {
-                sigma[k][t] = 0.0;
+                sigma[w][t] = 0.0;
             }
         }
     }
     
-    printf("Sigma calculado correctamente\n");
+    printf("Sigma calculado correctamente: [%d][%d]\n", palabras_dic, temas);
     free(n_k);
     
-    return sigma;
+    return sigma;  // Retorna [1063][50]
 }
 
 float** parametro_gama(float **mtx_1){
