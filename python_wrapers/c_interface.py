@@ -4,7 +4,7 @@ from numpy import ctypeslib as npct
 import numpy as np
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-dll_path = os.path.join(base_dir, "c_libs/build", "lid_lda.dll")
+dll_path = os.path.join(base_dir, "c_libs/build", "lib_lda.dll")
 
 if not os.path.exists(dll_path):
     raise FileNotFoundError(f"No se encuentra la DLL en: {dll_path}")
@@ -76,10 +76,10 @@ def calcular_matriz_final(m1, m2, n_repeticiones):
     if not resultado:
         print("Error: matriz_final retornó NULL")
         return None
-    matriz = np.zeros((7, 50), dtype=np.float32)
+    matriz = np.zeros((7, 10), dtype=np.float32)
     try:
         for i in range(7):
-            for j in range(50):
+            for j in range(10):
                 matriz[i][j] = resultado[i][j]
     except Exception as e:
         print(f"Error al copiar datos: {e}")
@@ -104,7 +104,7 @@ def liberar_matrices(m1, m2, filas_m1, filas_m2):
     print("Memoria liberada")
 
 
-def param_sigma(mtx, filas=1063, columnas=50):
+def param_sigma(mtx, filas=1063, columnas=10):
     parametro_sigma = lib.parametro_sigma
     parametro_sigma.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_float))
     parametro_sigma.argtypes = [ctypes.POINTER(ctypes.POINTER(ctypes.c_float))] 

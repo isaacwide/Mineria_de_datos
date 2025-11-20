@@ -7,7 +7,7 @@ import numpy as np
 app = Flask(__name__)
 
 documentos = 7
-temas = 50
+temas = 10
 diccionario = 1064
 
 filename1 = "txts/documento/principito_lemas.txt"
