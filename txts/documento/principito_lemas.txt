@@ -1,7 +1,6 @@
 DOCUMENT1
 principito
 antoine
-saint-exupéry
 leon
 werth
 niño
@@ -15,7 +14,6 @@ mayor
 preguntar
 dibujo
 miedo
-qué
 asustar
 uno
 sombrero
@@ -45,6 +43,7 @@ necesidad
 explicación
 dibujo
 número
+DOCUMENT2
 favor
 píntamir
 uno
@@ -57,7 +56,6 @@ logré
 fin
 articular
 palabra
-qué
 responder
 entonces
 suavemente
@@ -132,7 +130,6 @@ crees
 necesario
 hierba
 cordero
-qué
 tierra
 todo
 pequeño
@@ -143,10 +140,9 @@ bueno
 pequeño
 dormido
 conocí
-al
 principito
-qué
 cosa
+DOCUMENT3
 uno
 cosa
 volar
@@ -155,19 +151,15 @@ avión
 avión
 sentir
 orgulloso
-al
-decir él
 volar
 entonces
 gritar
 cómo
 has
 caer
-del
 cielo
 modestamente
 ah
-qué
 curioso
 principito
 lanzar
@@ -182,9 +174,7 @@ serio
 añadir
 entonces
 vién
-del
 cielo
-qué
 planeta
 divisé
 uno
@@ -252,15 +242,11 @@ uno
 cuerda
 uno
 estaca
-atar él
 día
 proposición
 parecer
 chocar
-al
 principito
-atar él
-qué
 idea
 raro
 ata
@@ -299,6 +285,7 @@ lejos
 manera
 saber
 uno
+DOCUMENT4
 segundo
 cosa
 importante
@@ -310,7 +297,6 @@ uno
 casa
 felizmente
 reputación
-del
 asteroide
 uno
 dictador
@@ -319,7 +305,6 @@ saber
 comprender
 envejecer
 gracias
-al
 cordero
 preocupado
 uno
@@ -333,10 +318,8 @@ comar
 arbusto
 cierto
 ah
-qué
 contesto
 comprender
-qué
 importante
 cordero
 comer
@@ -347,11 +330,9 @@ entonces
 comar
 baobabs
 idea
-del
 rebaño
 elefante
 reír
-al
 principito
 poner
 elefante
@@ -365,7 +346,6 @@ antes
 crecer
 pequeñito
 cierto
-qué
 querer
 cordero
 comar
@@ -374,6 +354,7 @@ ah
 principito
 cómo
 ido
+DOCUMENT5
 comprender
 lentamente
 vida
@@ -385,7 +366,6 @@ puesta
 sol
 esperar
 esperar
-qué
 sol
 poner
 pareciste
@@ -399,11 +379,11 @@ creer
 tierra
 uno
 día
-poner él
 sol
 cuarenta
 tres
 vez
+DOCUMENT6
 uno
 tarde
 añadiste
@@ -428,6 +408,7 @@ uno
 cordero
 comar
 arbusto
+DOCUMENT7
 comer
 flor
 uno
@@ -440,10 +421,8 @@ espina
 flor
 espina
 entonces
-qué
 servir
 espina
-qué
 servir
 espina
 espina
@@ -475,7 +454,6 @@ responder
 cualquiera
 cosa
 callser
-ocupar yo
 cosa
 serio
 mirar
@@ -499,7 +477,6 @@ avergonzar
 uno
 implacable
 añadir
-DOCUMENT2
 confundir
 todo
 todo
@@ -509,12 +486,10 @@ irritado
 sacudir
 cabeza
 agitar
-al
 viento
 cabello
 dorado
 uno
-qué
 uno
 hongo
 principito
@@ -528,10 +503,10 @@ estallar
 bruscamente
 sollozo
 belleza
-al
 abrigo
 envoltura
 verde
+DOCUMENT8
 flor
 trabajar
 precisión
@@ -540,13 +515,11 @@ ah
 perdóname
 apenas
 acabar
-despertar yo
 todo
 despeinado
 principito
 contener
 admiración
-qué
 hermoso
 parecer
 ya
@@ -577,7 +550,6 @@ ejemplo
 hablar
 cuatro
 espina
-al
 principito
 ya
 venir
@@ -625,20 +597,15 @@ tierra
 gusto
 venir
 biombo
-buscar él
 dejabas
-hablar yo
 insistir
 tos
-dar él
-al
 remordimiento
 historia
 garra
 tigre
 molestar
 debido
-enternecer yo
 contar
 todavía
 adiós
@@ -648,11 +615,11 @@ adiós
 repetir
 principito
 flor
+DOCUMENT9
 tosió
 resfriar
 uno
 tonta
-al
 fin
 flor
 perdóname
@@ -699,10 +666,7 @@ orgulloso
 encontrar
 región
 asteroides
-ocupar él
 algo
-instruir él
-al
 mismo
 tiempo
 decidir
@@ -724,9 +688,7 @@ majestuoso
 ah
 exclamar
 rey
-al
 divisar
-al
 principito
 uno
 súbdito
@@ -746,11 +708,9 @@ etiqueta
 permitir
 bostezar
 presencia
-del
 rey
 monarca
 prohíbir
-evitar él
 responder
 principito
 confuso
@@ -787,7 +747,6 @@ ordenar
 pronto
 bostez
 bostez
-sentar yo
 preguntar
 tímidamente
 principito
@@ -817,7 +776,6 @@ pregunt
 apresurar
 rey
 señor
-qué
 ejercer
 todo
 contestar
@@ -864,7 +822,6 @@ sol
 demar
 gusto
 ordénele
-al
 sol
 poner
 culpa
@@ -904,7 +861,6 @@ ya
 uno
 ya
 nada
-al
 rey
 parta
 responder
@@ -916,7 +872,6 @@ súbdito
 vayar
 ministro
 ministro
-qué
 justicia
 nadie
 quien
@@ -928,14 +883,11 @@ inclinar
 echar
 uno
 ojeada
-al
 otro
 lado
-del
 planeta
 abajo
 nadie
-juzgar yo
 mismo
 cualquiera
 parte
@@ -955,7 +907,6 @@ ya
 preparativo
 querer
 disgustar
-al
 viejo
 monarca
 vuestra
@@ -966,7 +917,6 @@ puntualmente
 uno
 orden
 razonable
-ordenar yo
 ejemplo
 partir
 antes
@@ -1000,7 +950,6 @@ extraño
 principito
 mismo
 viaje
-DOCUMENT3
 segundo
 planeta
 habitado
@@ -1011,13 +960,11 @@ ah
 uno
 admirador
 venir
-visitar yo
 gritar
+DOCUMENT10
 vanidoso
-al
 divisar
 lejos
-al
 principito
 vanidoso
 todo
@@ -1027,7 +974,6 @@ admirador
 buenos
 día
 principito
-qué
 sombrero
 raro
 saludar
@@ -1060,7 +1006,6 @@ principito
 cansar
 monotonía
 juego
-qué
 sombrero
 caer
 preguntar
@@ -1075,9 +1020,7 @@ admirar
 verdad
 preguntar
 vanidoso
-al
 principito
-qué
 significar
 admirar
 admirar
@@ -1089,7 +1032,6 @@ mejor
 vestido
 rico
 inteligente
-del
 planeta
 solo
 planeta
@@ -1101,9 +1043,7 @@ manera
 bueno
 admirar
 principito
-encoger él
 hombro
-qué
 servir
 principito
 marchar
@@ -1122,14 +1062,12 @@ uno
 visita
 corto
 hundir
-al
 principito
 uno
+DOCUMENT11
 gran
 melancolía
-qué
 preguntar
-al
 bebedor
 sentado
 silencio
@@ -1145,14 +1083,12 @@ responder
 bebedor
 tono
 lúgubre
-qué
 beb
 volver
 preguntar
 principito
 olvidar
 olvidar
-qué
 inquirir
 principito
 ya
@@ -1165,11 +1101,9 @@ bebedor
 bajar
 cabeza
 vergüenza
-qué
 informar
 principito
 deseoso
-ayudar él
 vergüenza
 beber
 concluir
@@ -1187,7 +1121,6 @@ persona
 mayor
 extraño
 seguir
-decir él
 principito
 viaje
 buenos
@@ -1200,12 +1133,13 @@ uno
 millón
 seisciento
 veintidós
+mil
 seteciento
+DOCUMENT12
 treinta
 uno
 quinientos
 millón
-qué
 formulado
 hombre
 negocio
@@ -1222,7 +1156,6 @@ quinientos
 uno
 millón
 millón
-qué
 hombre
 negocio
 comprender
@@ -1253,7 +1186,6 @@ desvariar
 ah
 estrellas
 estrellas
-qué
 quinientos
 millón
 estrella
@@ -1262,6 +1194,7 @@ uno
 millón
 seisciento
 veintidós
+mil
 seteciento
 treinta
 uno
@@ -1269,9 +1202,7 @@ uno
 hombre
 serio
 exacto
-qué
 estrella
-qué
 nada
 poseo
 estrella
@@ -1283,13 +1214,11 @@ poseer
 nada
 reinar
 diferente
-qué
 servir
 poseer
 estrella
 servir
 rico
-qué
 servir
 rico
 servir
@@ -1326,7 +1255,6 @@ idea
 bastar
 verdad
 principito
-qué
 administro
 cuento
 recuento
@@ -1343,13 +1271,10 @@ hombre
 serio
 principito
 quedar
-del
 todo
 satisfecho
-colocar él
 uno
 banco
-qué
 querer
 querer
 escribir
@@ -1395,15 +1320,12 @@ mismo
 sencillez
 viaje
 llegar
-al
 planeta
 saludar
 respetuosamente
-al
 farolero
 buenos
 día
-qué
 acaba
 apagar
 farol
@@ -1412,18 +1334,16 @@ responder
 farolero
 buenos
 día
-qué
 consigna
 apagar
 farol
+DOCUMENT13
 buenas
 noches
 encender
 farol
-qué
 acaba
 volver
-encender él
 consigna
 comprendo
 principito
@@ -1501,7 +1421,6 @@ vez
 fiel
 perezoso
 principito
-DOCUMENT4
 proseguir
 adelantar
 gran
@@ -1523,7 +1442,6 @@ apagar
 farol
 único
 quien
-haber yo
 amigo
 planeta
 pequeño
@@ -1545,10 +1463,10 @@ uno
 explorador
 exclamar
 divisar
-al
 principito
 sentar
 mesa
+DOCUMENT14
 reposar
 uno
 viajar
@@ -1557,17 +1475,14 @@ dónde
 vién
 preguntar
 anciano
-qué
 libro
 grande
 preguntar
 vez
 principito
-qué
 usted
 geógrafo
 anciano
-qué
 uno
 geógrafo
 uno
@@ -1589,7 +1504,6 @@ uno
 mirada
 alrededor
 planeta
-del
 geógrafo
 uno
 planeta
@@ -1597,23 +1511,19 @@ majestuoso
 hermoso
 planeta
 océano
-saber él
 geógrafo
 ah
 principito
 sentir
 decepcionado
 montaña
-saber él
 repetir
 geógrafo
 ciudad
 río
 desierto
-saber él
 usted
 geógrafo
-qué
 uno
 explorador
 mentir
@@ -1624,7 +1534,6 @@ geografía
 uno
 explorador
 bebierar
-qué
 preguntar
 principito
 borracho
@@ -1644,7 +1553,6 @@ explorador
 posible
 convencido
 moralidad
-del
 explorador
 buen
 uno
@@ -1671,19 +1579,15 @@ flor
 flor
 tomar
 nota
-qué
 bonito
 flor
 efímero
-qué
 significar
 efímero
 volcán
 extinguido
-despertar él
 interrumpir
 principito
-qué
 significar
 efímero
 volcán
@@ -1692,7 +1596,6 @@ igual
 interesante
 montaña
 cambiar
-qué
 significar
 efímero
 repetir
@@ -1713,7 +1616,6 @@ amenazado
 desaparecer
 próximamente
 indudablemente
-qué
 aconsejar
 usted
 visitar
@@ -1738,7 +1640,6 @@ principito
 buenas
 noches
 serpiente
-qué
 planeta
 caer
 preguntar
@@ -1748,10 +1649,12 @@ tierra
 responder
 serpiente
 ah
+DOCUMENT15
 nadie
 tierra
 desierto
 desierto
+DOCUMENT16
 nadie
 tierra
 grande
@@ -1762,11 +1665,9 @@ uno
 piedra
 elevar
 ojo
-al
 cielo
 bello
 serpiente
-qué
 venir
 problema
 uno
@@ -1817,14 +1718,11 @@ navío
 serpiente
 enroscar
 alrededor
-del
 tobillo
-del
 principito
 uno
 brazalete
 oro
-al
 tocar
 volver
 tierra
@@ -1847,7 +1745,6 @@ ayudarte
 oh
 principito
 comprender
-qué
 habla
 enigma
 resolver
@@ -1876,6 +1773,7 @@ dónde
 hombre
 preguntar
 cortésmente
+DOCUMENT17
 principito
 flor
 uno
@@ -1891,7 +1789,6 @@ buenos
 día
 exclamar
 principito
-al
 acaso
 buenos
 día
@@ -1911,6 +1808,7 @@ contestar
 eco
 sed
 amigo
+DOCUMENT18
 solo
 principito
 solo
@@ -1942,6 +1840,7 @@ ah
 exclamar
 principito
 entonces
+DOCUMENT19
 aparecer
 zorro
 buenos
@@ -1959,12 +1858,12 @@ voz
 quién
 preguntar
 principito
-qué
 bonito
 eres
 uno
 zorro
 zorro
+DOCUMENT20
 ven
 jugar
 conmigo
@@ -1982,27 +1881,22 @@ uno
 breve
 reflexión
 añadir
-qué
 significar
 domesticar
 zorro
-qué
 busca
 busco
 hombre
 responder
 principito
-qué
 significar
 domesticar
 principito
 busco
 amigo
-qué
 significar
 domesticar
 volver
-DOCUMENT5
 preguntar
 principito
 uno
@@ -2040,7 +1934,6 @@ otro
 planeta
 cazador
 planeta
-qué
 interesante
 gallina
 nada
@@ -2056,7 +1949,6 @@ mirar
 uno
 buen
 rato
-al
 principito
 favor
 domestícamar
@@ -2069,15 +1961,12 @@ buscar
 amigo
 conocer
 cosa
-qué
 preguntar
 principito
 principito
 volver
-al
 día
 siguiente
-qué
 uno
 rito
 inquirir
@@ -2085,7 +1974,6 @@ principito
 manera
 principito
 domesticar
-al
 zorro
 acercar
 día
@@ -2113,19 +2001,15 @@ gano
 zorro
 ganar
 causa
-del
 color
-del
 trigo
 luego
 añadir
-ir tú
 rosa
 comprenderás
 único
 mundo
 volver
-decir yo
 adiós
 regalar
 uno
@@ -2140,7 +2024,6 @@ rosas
 sentir
 molesto
 oir
-al
 principito
 continuar
 diciéndol
@@ -2152,7 +2035,6 @@ invisible
 ojo
 repetir
 principito
-acordar él
 importante
 rosa
 tiempo
@@ -2161,13 +2043,11 @@ tiempo
 perder
 repetir
 principito
-recordar él
 responsable
 rosa
 repetir
 principito
 fin
-recordar él
 buenos
 día
 principito
@@ -2175,12 +2055,12 @@ buenos
 día
 responder
 guardavía
-qué
 preguntar
 principito
 formo
 viajero
 paquet
+mil
 despacho
 tren
 llevar
@@ -2193,14 +2073,13 @@ tren
 rápido
 iluminado
 rugir
+DOCUMENT21
 trueno
 temblar
 caseta
-del
 guardavía
 prís
 principito
-qué
 buscar
 siquiera
 conductor
@@ -2254,7 +2133,6 @@ niño
 aplastar
 nariz
 vidrio
-qué
 suerte
 guardavía
 buenos
@@ -2265,6 +2143,7 @@ día
 responder
 comerciante
 uno
+DOCUMENT22
 comerciante
 píldora
 perfeccionado
@@ -2277,12 +2156,12 @@ ya
 sentir
 gana
 beber
-qué
 vend
 preguntar
 principito
 economizar
 tiempo
+DOCUMENT23
 cálculo
 hecho
 experto
@@ -2291,7 +2170,6 @@ cincuenta
 tres
 minuto
 semana
-qué
 cincuenta
 tres
 minuto
@@ -2314,7 +2192,6 @@ avería
 desierto
 escuchar
 historia
-del
 comerciante
 beber
 último
@@ -2325,10 +2202,8 @@ amigo
 zorro
 tratar
 ahora
-del
 zorro
 muchachito
-qué
 morir
 sed
 comprender
@@ -2336,6 +2211,7 @@ razonamiento
 replicar
 bueno
 uno
+DOCUMENT24
 amigo
 aún
 morir
@@ -2366,10 +2242,8 @@ absurdo
 buscar
 uno
 pozo
-al
 azar
 inmensidad
-del
 desierto
 embargo
 poner
@@ -2390,7 +2264,6 @@ sed
 uno
 fiebre
 palabra
-del
 principito
 danzar
 mente
@@ -2408,7 +2281,6 @@ palabra
 callé
 saber
 bien
-interrogar él
 principito
 cansado
 sentar
@@ -2423,7 +2295,6 @@ uno
 flor
 respondí
 seguramente
-mire 
 hablar
 pliegue
 arena
@@ -2434,7 +2305,6 @@ bello
 añadir
 principito
 embellecir
-al
 desierto
 principito
 pozo
@@ -2447,13 +2317,11 @@ uno
 secreto
 fondo
 corazón
-al
 principito
 ya
 tratar
 casa
 estrella
-del
 desierto
 embellecir
 invisible
@@ -2464,7 +2332,6 @@ acuerdo
 zorro
 continué
 caminar
-al
 rayar
 alba
 descubrí
@@ -2483,7 +2350,6 @@ añadir
 valer
 pena
 extraño
-al
 principito
 todo
 punto
@@ -2497,16 +2363,15 @@ mover
 roldana
 roldana
 gimeír
+DOCUMENT25
 uno
 viejo
 veleta
 viento
 dormir
 oyes
-DOCUMENT6
 principito
 despertar
-al
 pozo
 canta
 querer
@@ -2528,6 +2393,7 @@ tierra
 principito
 cultivar
 cinco
+mil
 rosas
 uno
 jardín
@@ -2537,7 +2403,6 @@ encontrar
 respondí
 embargo
 buscar
-encontrar él
 uno
 solo
 rosa
@@ -2555,26 +2420,19 @@ beber
 encontrar
 bien
 arena
-al
 alba
 color
 miel
-del
 gozar
-sentir yo
 dichoso
-qué
-sentir yo
 triste
 necesario
-cump él
 promesa
 dulcemente
 principito
 nuevamente
 sentar
 junto
-qué
 promesa
 ya
 saber
@@ -2583,7 +2441,6 @@ cordero
 responsable
 flor
 saqué
-del
 bolsillo
 esbozo
 dibujo
@@ -2644,7 +2501,6 @@ principito
 sonrojó
 nuevamente
 comprender
-qué
 experimentar
 uno
 extraño
@@ -2684,7 +2540,6 @@ mañana
 tarde
 tranquilo
 acordar
-del
 zorro
 dejar
 uno
@@ -2720,6 +2575,7 @@ esperarmar
 noche
 veinte
 metro
+DOCUMENT26
 continuar
 distinguir
 nada
@@ -2733,7 +2589,6 @@ buen
 veneno
 estás
 seguro
-hacer yo
 sufrir
 detener
 corazón
@@ -2744,10 +2599,8 @@ vetir
 principito
 querer
 volver
-bajar yo
 llegué
 junto
-al
 muro
 tiempo
 recibir
@@ -2755,9 +2608,7 @@ brazo
 principito
 blanco
 nieve
-qué
 historia
-char él
 serpiente
 alegrar
 principito
@@ -2772,7 +2623,6 @@ cómo
 saber
 precisamente
 venir
-comunicar él
 pesar
 esperar
 lograr
@@ -2827,7 +2677,6 @@ estrella
 encontrar
 precisamente
 encima
-del
 lugar
 caer
 año
@@ -2857,7 +2706,6 @@ uno
 estrella
 dulce
 mirar
-al
 cielo
 noche
 todo
@@ -2873,7 +2721,6 @@ cuerda
 uno
 música
 acuerdas
-qué
 buen
 cierto
 rio
@@ -2889,7 +2736,6 @@ risa
 regalo
 precisamente
 agua
-qué
 quier
 rio
 nuevamente
@@ -2899,7 +2745,6 @@ consolar
 uno
 estarás
 contento
-haber yo
 conocer
 rio
 otro
@@ -2948,7 +2793,6 @@ veneno
 segundo
 mordedura
 noche
-poner él
 camino
 alcancer
 marchar
@@ -2980,6 +2824,7 @@ uno
 corteza
 viejo
 abandonar
+DOCUMENT27
 nada
 triste
 viejo
@@ -3004,7 +2849,6 @@ estrella
 beber
 callar
 divertido
-DOCUMENT7
 tendrar
 quinientos
 millón
@@ -3028,12 +2872,10 @@ inocente
 sólo
 cuatro
 espina
-defender él
 todo
 mundo
 sentar
 ya
-mantener yo
 pie
 todo
 vacilar
@@ -3067,7 +2909,6 @@ menor
 ruido
 causa
 arena
-qué
 suceder
 planeta
 quizás
@@ -3075,7 +2916,6 @@ cordero
 comer
 flor
 miren
-al
 cielo
 pregúntense
 cordero

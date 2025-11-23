@@ -3,11 +3,11 @@
 #include<string.h>
 #include<time.h>
 
-#define documentos 13
-#define temas 10
-#define palabras_dic 1063
-#define betha 1.0
-#define alfa 0.01
+int documentos = 27 ;
+int temas = 300 ;
+int palabras_dic  = 1022;
+float  betha = (50.0/300.0) ; 
+float alfa = 0.01;
 
 // Declaración adelantada de la función
 float numeros_aleatorios();
@@ -40,7 +40,12 @@ int es_delimitador(char *palabra) {
     }
     return 0;
 }
+__declspec(dllexport) void set_parametros (int docs, int topics, int vocab){
+    documentos = docs;
+    temas = topics;
+    palabras_dic = vocab;
 
+}
 
 __declspec(dllexport) float** word_in_topic(char *filename1, char *filename2) {
     FILE *file1 = fopen(filename1, "r");
@@ -101,9 +106,9 @@ __declspec(dllexport) float** dic_in_topic(char *filename1, char *filename3) {
         return NULL;
     }
 
-    char diccionario[1300][100];
+    char diccionario[1025][100];
     int num_palabras_dic = 0;
-    while (fscanf(file_dic, "%s", diccionario[num_palabras_dic]) != EOF && num_palabras_dic < 1300) {
+    while (fscanf(file_dic, "%s", diccionario[num_palabras_dic]) != EOF && num_palabras_dic < 1025) {
         num_palabras_dic++;
     }
     fclose(file_dic);
@@ -127,7 +132,7 @@ __declspec(dllexport) float** dic_in_topic(char *filename1, char *filename3) {
     }
 
     // Crear rangos para asignación aleatoria uniforme
-    double rangos[51] = {0};
+    double *rangos = (double*)calloc(temas + 1, sizeof(double));
     for(int i = 0; i < temas; i++){
         rangos[i+1] = rangos[i] + (1.0 / (double)temas);
     }
@@ -347,12 +352,12 @@ float *vector_intervalos(int posDic, int posDocumento, float **mtx_1, float **mt
     
     for(int i = 0; i < temas; i++){
         float a = mtx_2[i][posDic] + betha;
-        float b = n_k[posDic] + (betha * temas);
+        float b = n_k[i] + (betha * palabras_dic);
         float primerCociente = (b > 0) ? (a / b) : 0.0; // P(palabra|tópico)
 
         // Termino de la distribución de tópicos por documento (gamma)
         float a_1 = mtx_1[posDocumento][i] + alfa;
-        float b_1 = n_m[posDocumento] + (alfa * palabras_dic);
+        float b_1 = n_m[posDocumento] + (alfa * temas);
         float segundoCociente = (b_1 > 0) ? (a_1 / b_1) : 0.0; // P(tópico|documento)
 
         // El vector v[i] es proporcional a P(palabra|tópico) * P(tópico|documento)

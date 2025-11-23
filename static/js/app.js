@@ -1,6 +1,81 @@
 document.addEventListener('DOMContentLoaded', function() {
     const botonMostrar = document.getElementById('click');
+    const botonConfigurar = document.getElementById('btn-configurar');
     const resultadosDiv = document.getElementById('resultados');
+    const estadoConfig = document.getElementById('estado-config');
+    const estadoTexto = document.getElementById('estado-texto');
+    
+    // ========== CONFIGURAR MODELO ==========
+    botonConfigurar.addEventListener('click', async function() {
+        try {
+            const numTopicos = parseInt(document.getElementById('num_topicos').value);
+            
+            // Validar
+            if (numTopicos < 1 || numTopicos > 300) {
+                alert('⚠️ El número de tópicos debe estar entre 1 y 300');
+                return;
+            }
+            
+            // Deshabilitar botón y mostrar loading
+            botonConfigurar.disabled = true;
+            botonConfigurar.innerHTML = `
+                <svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Configurando...</span>
+            `;
+            
+            // Enviar configuración al backend
+            console.log(`📡 Configurando ${numTopicos} tópicos...`);
+            const response = await fetch('/api/configurar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ temas: numTopicos })
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error al configurar');
+            }
+            
+            const data = await response.json();
+            console.log('✅ Configuración exitosa:', data);
+            
+            // Mostrar estado exitoso
+            estadoConfig.classList.remove('hidden', 'bg-red-50', 'border-red-300');
+            estadoConfig.classList.add('bg-green-50', 'border-2', 'border-green-300');
+            estadoTexto.innerHTML = `
+                <span class="text-green-600 font-semibold">✓ Configurado</span> - 
+                ${data.temas} tópicos, ${data.documentos} documentos
+            `;
+            
+            // Notificar éxito
+            alert(`✅ Modelo configurado exitosamente con ${data.temas} tópicos`);
+            
+        } catch (error) {
+            console.error('❌ Error al configurar:', error);
+            
+            // Mostrar estado de error
+            estadoConfig.classList.remove('hidden', 'bg-green-50', 'border-green-300');
+            estadoConfig.classList.add('bg-red-50', 'border-2', 'border-red-300');
+            estadoTexto.innerHTML = `
+                <span class="text-red-600 font-semibold">✗ Error:</span> ${error.message}
+            `;
+            
+            alert(`❌ Error: ${error.message}`);
+            
+        } finally {
+            // Restaurar botón
+            botonConfigurar.disabled = false;
+            botonConfigurar.innerHTML = `
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span>Configurar Modelo</span>
+            `;
+        }
+    });
     
     botonMostrar.addEventListener('click', async function() {
         try {
@@ -18,23 +93,47 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const Iteraciones = document.getElementById('iteraciones').value;
             
-            // Obtener TODAS las matrices incluyendo tópicos y métricas de entropía
-            const [response1, response2, response3, response4] = await Promise.all([
-                fetch('/api/matrices'),
-                fetch(`/api/matrizFinal?repeticiones=${Iteraciones}`),
-                fetch('/api/topicosfinal'),
-                fetch(`/api/entropia-final?repeticiones=${Iteraciones}`)
-            ]);
-            
-            const data1 = await response1.json();
-            const data2 = await response2.json();
-            const data3 = await response3.json();
-            const data4 = await response4.json();
-            
-            if (data1.error || data2.error || data3.error || data4.error) {
-                alert('Error: ' + (data1.error || data2.error || data3.error || data4.error));
-                return;
+            // Función auxiliar para manejar respuestas
+            async function fetchWithErrorHandling(url, description) {
+                console.log(`📡 Fetching ${description}: ${url}`);
+                const response = await fetch(url);
+                
+                console.log(`📥 Response status for ${description}: ${response.status}`);
+                console.log(`📥 Content-Type: ${response.headers.get('content-type')}`);
+                
+                // Verificar si la respuesta es exitosa
+                if (!response.ok) {
+                    const text = await response.text();
+                    console.error(`❌ Error en ${description}:`, text);
+                    throw new Error(`Error en ${description}: ${response.status} - ${text.substring(0, 200)}`);
+                }
+                
+                // Verificar si es JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    console.error(`❌ Respuesta no-JSON para ${description}:`, text.substring(0, 500));
+                    throw new Error(`La respuesta de ${description} no es JSON. Recibido: ${text.substring(0, 200)}`);
+                }
+                
+                const data = await response.json();
+                console.log(`✅ Datos recibidos de ${description}:`, data);
+                
+                // Verificar si hay error en los datos
+                if (data.error) {
+                    throw new Error(`Error en ${description}: ${data.error}`);
+                }
+                
+                return data;
             }
+            
+            // Obtener matrices paso a paso con mejor manejo de errores
+            console.log('🚀 Iniciando carga de datos...');
+            
+            const data1 = await fetchWithErrorHandling('/api/matrices', 'matrices iniciales');
+            const data2 = await fetchWithErrorHandling(`/api/matrizFinal?repeticiones=${Iteraciones}`, 'matriz final');
+            const data3 = await fetchWithErrorHandling('/api/topicosfinal', 'tópicos');
+            const data4 = await fetchWithErrorHandling(`/api/entropia-final?repeticiones=${Iteraciones}`, 'entropía');
             
             // Combinar los datos
             const dataCombinada = {
@@ -44,6 +143,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 topicos: data3,
                 metricas: data4
             };
+            
+            console.log('✅ Todos los datos cargados exitosamente');
             
             // Mostrar resultados
             mostrarMatrices(dataCombinada);
@@ -62,9 +163,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 300);
             
         } catch (error) {
-            console.error('Error:', error);
-            alert('Error al cargar los datos: ' + error.message);
-        } finally {
+            console.error('❌ Error completo:', error);
+            console.error('Stack trace:', error.stack);
+            
+            // Mostrar mensaje de error más detallado
+            alert(`Error al cargar los datos:\n\n${error.message}\n\nRevisa la consola del navegador (F12) para más detalles.`);
+            
+            // Restaurar botón
+            botonMostrar.innerHTML = 'Mostrar Resultados';
             botonMostrar.disabled = false;
         }
     });
@@ -194,13 +300,12 @@ function generarTopicos(topicosData) {
                 <div class="mb-3">
                     <div class="flex items-center justify-between mb-1">
                         <h5 class="text-lg font-bold ${color.text} truncate pr-2">
-                            ${topico.nombre || 'Tópico ' + topico.topico}
+                            Tópico ${topico.topico + 1}
                         </h5>
                         <span class="${color.badge} text-white text-xs font-semibold px-2 py-1 rounded-full">
                             ${palabrasMostrar[0].probabilidad.toFixed(3)}
                         </span>
                     </div>
-                    <p class="text-xs text-gray-500">ID: ${topico.topico}</p>
                 </div>
                 <div class="flex flex-wrap gap-2 mb-2">
                     ${palabrasMostrar.map(p => `
@@ -225,7 +330,10 @@ function generarTopicos(topicosData) {
 
 function mostrarDetalleTopico(topicoId) {
     fetch('/api/topicosfinal')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) throw new Error('Error al cargar tópicos');
+            return response.json();
+        })
         .then(data => {
             const topico = data.topicos.find(t => t.topico === topicoId);
             if (topico) {
@@ -243,7 +351,7 @@ function mostrarDetalleTopico(topicoId) {
                                 <div class="flex-1">
                                     <h3 class="text-3xl font-bold text-transparent bg-clip-text 
                                                bg-gradient-to-r from-purple-600 to-indigo-600 mb-2">
-                                        ${topico.nombre || 'Tópico ' + topico.topico}
+                                        Tópico ${topico.topico + 1}
                                     </h3>
                                     <p class="text-sm text-gray-500 flex items-center gap-2">
                                         <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full font-semibold">
@@ -313,8 +421,16 @@ function mostrarDetalleTopico(topicoId) {
         })
         .catch(error => {
             console.error('Error al cargar detalles del tópico:', error);
-            alert('Error al cargar los detalles del tópico');
+            alert('Error al cargar los detalles del tópico: ' + error.message);
         });
+}
+
+function cerrarModal(event) {
+    if (event.target.id === 'modal-topico') {
+        const modal = event.target;
+        modal.classList.add('animate-fade-out');
+        setTimeout(() => modal.remove(), 200);
+    }
 }
 
 function cerrarModal(event) {

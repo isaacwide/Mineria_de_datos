@@ -1,6 +1,5 @@
 principito
 antoine
-saint-exupéry
 leon
 werth
 niño
@@ -12,7 +11,6 @@ mayor
 preguntar
 dibujo
 miedo
-qué
 asustar
 uno
 sombrero
@@ -96,18 +94,15 @@ exclamar
 bueno
 dormido
 conocí
-al
 cosa
 volar
 avión
 sentir
 orgulloso
-decir él
 gritar
 cómo
 has
 caer
-del
 cielo
 modestamente
 ah
@@ -163,7 +158,6 @@ servir
 duda
 cuerda
 estaca
-atar él
 día
 proposición
 parecer
@@ -223,7 +217,6 @@ reíste
 mismo
 dijistir
 creer
-poner él
 cuarenta
 tres
 vez
@@ -249,7 +242,6 @@ ingenuo
 defender
 terrible
 callser
-ocupar yo
 estupefacto
 martillo
 mano
@@ -285,7 +277,6 @@ precisión
 bostezar
 perdóname
 acabar
-despertar yo
 despeinado
 contener
 admiración
@@ -324,17 +315,13 @@ cubrirás
 fanal
 frío
 gusto
-buscar él
 dejabas
-hablar yo
 insistir
 tos
-dar él
 remordimiento
 historia
 molestar
 debido
-enternecer yo
 contar
 todavía
 adiós
@@ -366,8 +353,6 @@ viesar
 llorar
 región
 asteroides
-ocupar él
-instruir él
 visitarlo
 habitado
 rey
@@ -391,7 +376,6 @@ etiqueta
 permitir
 monarca
 prohíbir
-evitar él
 viaje
 dormir
 ordenar
@@ -406,7 +390,6 @@ gana
 enrojeceir
 hum
 pronto
-sentar yo
 tímidamente
 sentarte
 recoger
@@ -462,7 +445,6 @@ echar
 ojeada
 lado
 abajo
-juzgar yo
 condenar
 muerte
 marchar
@@ -475,7 +457,6 @@ desear
 puntualmente
 orden
 razonable
-ordenar yo
 minuto
 respondierar
 vacilar
@@ -489,7 +470,6 @@ autoridad
 extraño
 vanidoso
 admirador
-visitar yo
 demá
 buenos
 saludar
@@ -515,7 +495,6 @@ inteligente
 solo
 hazme
 admíramar
-encoger él
 hombro
 decididamente
 tercer
@@ -534,7 +513,6 @@ compadecido
 confesar
 bajar
 informar
-ayudar él
 beber
 concluir
 encerrar
@@ -549,6 +527,7 @@ quinientos
 millón
 seisciento
 veintidós
+mil
 seteciento
 treinta
 formulado
@@ -586,7 +565,6 @@ cuento
 recuento
 difícil
 satisfecho
-colocar él
 banco
 escribir
 papel
@@ -612,7 +590,6 @@ consigna
 buenas
 noches
 encender
-encender él
 comprendo
 enjugar
 frente
@@ -638,7 +615,6 @@ proseguir
 adelantar
 replicar
 único
-haber yo
 lugar
 dos
 sexto
@@ -665,7 +641,6 @@ dirigir
 mirada
 alrededor
 océano
-saber él
 decepcionado
 mentir
 catástrofe
@@ -688,7 +663,6 @@ bonito
 efímero
 volcán
 extinguido
-despertar él
 interrumpir
 actividad
 renunciar
@@ -784,17 +758,13 @@ gano
 causa
 color
 trigo
-ir tú
 comprenderás
-decir yo
 regalar
 secreto
 molesto
 diciéndol
 esencial
 invisible
-acordar él
-recordar él
 responsable
 guardavía
 formo
@@ -873,11 +843,9 @@ diciéndome
 simplemente
 corazón
 callé
-interrogar él
 cansado
 respondí
 seguramente
-mire 
 pliegue
 arena
 formar
@@ -910,13 +878,10 @@ pesado
 dame
 comprendí
 cultivar
-encontrar él
 ciego
 miel
 gozar
-sentir yo
 dichoso
-cump él
 promesa
 junto
 bozal
@@ -970,23 +935,19 @@ metro
 distinguir
 veneno
 estás
-hacer yo
 sufrir
 detener
-bajar yo
 llegué
 recibir
 brazo
 blanco
 nieve
-char él
 alegrar
 hayas
 encontrado
 faltar
 podrar
 precisamente
-comunicar él
 pesar
 lograr
 trabajo
@@ -1044,8 +1005,6 @@ herrumbrós
 cascabel
 déjamir
 inocente
-defender él
-mantener yo
 pie
 instante
 moverme
