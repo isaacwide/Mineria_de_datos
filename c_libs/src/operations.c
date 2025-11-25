@@ -3,19 +3,29 @@
 #include<string.h>
 #include<time.h>
 
-int documentos = 27 ;
-int temas = 300 ;
-int palabras_dic  = 1022;
-float  betha = (50.0/300.0) ; 
+int documentos = 27;
+int temas = 300;
+int palabras_dic = 1022;
+float betha = 0.01;  //0.1
 float alfa = 0.01;
 
 // Declaración adelantada de la función
 float numeros_aleatorios();
 int es_delimitador(char *palabra);
 
+// Inicializar semilla aleatoria una vez
+void inicializar_aleatorio() {
+    static int inicializado = 0;
+    if (!inicializado) {
+        srand((unsigned int)time(NULL));
+        inicializado = 1;
+    }
+}
+
 float numeros_aleatorios() {
     return (float)rand() / RAND_MAX;
 }
+
 int es_delimitador(char *palabra) {
     // Delimitadores exactos
     const char *delims[] = {
@@ -40,28 +50,31 @@ int es_delimitador(char *palabra) {
     }
     return 0;
 }
-__declspec(dllexport) void set_parametros (int docs, int topics, int vocab){
+
+__declspec(dllexport) void set_parametros(int docs, int topics, int vocab) {
     documentos = docs;
     temas = topics;
     palabras_dic = vocab;
-
+    printf("Parámetros actualizados: docs=%d, topics=%d, vocab=%d\n", documentos, temas, palabras_dic);
 }
 
 __declspec(dllexport) float** word_in_topic(char *filename1, char *filename2) {
+    inicializar_aleatorio();  // Inicializar semilla aleatoria
+    //PARTICIPA EN LA ENCUESTA ACERCA DEL RESET DEL MUNDO DEL SERVIDOR
+    //EN EL WHATAPP OFICIAL DE mc.buap.pro
     FILE *file1 = fopen(filename1, "r");
     FILE *file2 = fopen(filename2, "r");
     
     // Asignar memoria dinámica para la matriz
     float **mtx_1 = (float**)malloc(documentos * sizeof(float*));
     for(int i = 0; i < documentos; i++) {
-        mtx_1[i] = (float*)calloc(temas, sizeof(float)); // calloc inicializa en 0.0
+        mtx_1[i] = (float*)calloc(temas, sizeof(float));
     }
 
     if(file1 == NULL || file2 == NULL) {
         printf("Error al abrir los archivos.\n");
         if(file1) fclose(file1);
         if(file2) fclose(file2);
-        // Liberar memoria antes de retornar
         for(int i = 0; i < documentos; i++) {
             free(mtx_1[i]);
         }
@@ -69,13 +82,18 @@ __declspec(dllexport) float** word_in_topic(char *filename1, char *filename2) {
         return NULL;
     }
 
-    double rangos[301] = {0};
+    // CORREGIDO: Rangos proporcionales al número de tópicos
+    double *rangos = (double*)malloc((temas + 1) * sizeof(double));
+    rangos[0] = 0.0;
+    double paso = 1.0 / (double)temas;  // ¡PROPORCIONAL!
+    
     for(int i = 0; i < temas; i++){
-        rangos[i+1] = rangos[i] + 0.02;
+        rangos[i+1] = rangos[i] + paso;
     }
 
     char palabra[100];
     int l = 0;
+    int palabras_asignadas = 0;
     
     while (fscanf(file1, "%s", palabra) != EOF) {
         if (es_delimitador(palabra)){
@@ -86,6 +104,7 @@ __declspec(dllexport) float** word_in_topic(char *filename1, char *filename2) {
                 for(int j = 0; j < temas; j++){
                     if (probabilidad >= rangos[j] && probabilidad < rangos[j+1]){
                         mtx_1[l-1][j]++;
+                        palabras_asignadas++;
                         break;
                     }
                 }
@@ -93,12 +112,17 @@ __declspec(dllexport) float** word_in_topic(char *filename1, char *filename2) {
         }
     }
 
+    free(rangos);
     fclose(file1);
     fclose(file2);
+    printf("word_in_topic: %d palabras asignadas a %d documentos y %d tópicos\n", 
+           palabras_asignadas, documentos, temas);
     return mtx_1;
 }
 
 __declspec(dllexport) float** dic_in_topic(char *filename1, char *filename3) {
+    inicializar_aleatorio();  // Inicializar semilla aleatoria
+    
     // 1. CARGAR DICCIONARIO
     FILE *file_dic = fopen(filename3, "r");
     if (file_dic == NULL) {
@@ -139,6 +163,7 @@ __declspec(dllexport) float** dic_in_topic(char *filename1, char *filename3) {
 
     char palabra[100];
     int doc_actual = 0;
+    int palabras_asignadas = 0;
     
     // Leer cada palabra del documento
     while (fscanf(file_docs, "%s", palabra) != EOF) {
@@ -154,7 +179,8 @@ __declspec(dllexport) float** dic_in_topic(char *filename1, char *filename3) {
                         float probabilidad = numeros_aleatorios();
                         for(int t = 0; t < temas; t++){
                             if (probabilidad >= rangos[t] && probabilidad < rangos[t+1]){
-                                mtx_2[t][j]++;  // [tópico][palabra_del_diccionario]
+                                mtx_2[t][j]++;
+                                palabras_asignadas++;
                                 break;
                             }
                         }
@@ -166,8 +192,10 @@ __declspec(dllexport) float** dic_in_topic(char *filename1, char *filename3) {
         }
     }
     fclose(file_docs);
+    free(rangos);
     
-    printf("Matriz dic_in_topic inicializada con asignaciones aleatorias.\n");
+    printf("dic_in_topic: %d asignaciones a %d tópicos y %d palabras del diccionario\n", 
+           palabras_asignadas, temas, num_palabras_dic);
     return mtx_2;
 }
 
@@ -179,18 +207,16 @@ float *n_ms(float **mtx_1){
             n_m[i] += mtx_1[i][j];
         }
     }
-
     return n_m;
 }
 
-float*n_ks(float**mtx_2){
+float* n_ks(float** mtx_2){
     float* n_k = (float*)calloc(temas, sizeof(float)); 
     for(int i = 0; i < temas; i++){
         for(int j = 0; j < palabras_dic; j++){
             n_k[i] += mtx_2[i][j];
         }
     }
-
     return n_k;
 }
 
@@ -200,56 +226,53 @@ __declspec(dllexport) float** parametro_sigma(float **mtx_2){
         return NULL;
     }
     
-    // mtx_2 es [temas][palabras_dic] = [50][1063]
     // Calcular n_k: suma de cada TÓPICO (fila) a través de todas las palabras
-    float *n_k = n_ks(mtx_2);  // Esto ya está correcto, retorna array de 50 elementos
+    float *n_k = n_ks(mtx_2);
     
-    // Asignar memoria para sigma [palabras_dic][temas] = [1063][50]
-    // Nota: Sigma tendrá dimensiones TRANSPUESTAS a mtx_2
+    // Asignar memoria para sigma [palabras_dic][temas]
     float **sigma = (float**)malloc(palabras_dic * sizeof(float*));
     for(int i = 0; i < palabras_dic; i++){
         sigma[i] = (float*)calloc(temas, sizeof(float));
     }
     
     // Calcular sigma: para cada palabra del diccionario y cada tópico
-    for(int w = 0; w < palabras_dic; w++){          // w = índice de palabra
-        for(int t = 0; t < temas; t++){              // t = índice de tópico
-            // Acceder a mtx_2 correctamente: mtx_2[tópico][palabra]
-            float a = mtx_2[t][w] + betha;           // ✓ mtx_2[t][w] es correcto
-            float b = n_k[t] + (betha * palabras_dic); // ✓ n_k[t] suma del tópico t
+    for(int w = 0; w < palabras_dic; w++){
+        for(int t = 0; t < temas; t++){
+            float a = mtx_2[t][w] + betha;
+            float b = n_k[t] + (betha * palabras_dic);
             
             if (b > 0) {
-                sigma[w][t] = a / b;  // P(palabra_w | tópico_t)
+                sigma[w][t] = a / b;
             } else {
                 sigma[w][t] = 0.0;
             }
         }
     }
     
-    printf("Sigma calculado correctamente: [%d][%d]\n", palabras_dic, temas);
+    printf("Sigma calculado: [%d palabras][%d tópicos]\n", palabras_dic, temas);
     free(n_k);
     
-    return sigma;  // Retorna [1063][50]
+    return sigma;
 }
 
 float** parametro_gama(float **mtx_1){
-    
-    
     if (mtx_1 == NULL) {
         printf("Error: mtx_1 es NULL\n");
         return NULL;
     }
     float* n_m = n_ms(mtx_1);
+    
     // Asignar memoria para gama
     float **gama = (float**)malloc(documentos * sizeof(float*));
     for(int i = 0; i < documentos; i++){
         gama[i] = (float*)calloc(temas, sizeof(float));
     }
+    
     // Calcular gama
     for(int k = 0; k < documentos; k++){
         for(int t = 0; t < temas; t++){
             float a = mtx_1[k][t] + alfa;
-            float b = n_m[k] + (alfa * temas);  // Sumar alfa * número de tópicos
+            float b = n_m[k] + (alfa * temas);
             
             if (b > 0) {
                 gama[k][t] = a / b;
@@ -259,9 +282,7 @@ float** parametro_gama(float **mtx_1){
         }
     }
     
-    printf("Gama calculado correctamente\n");
-    
-    // Liberar n_m
+    printf("Gama calculado: [%d documentos][%d tópicos]\n", documentos, temas);
     free(n_m);
     
     return gama;
@@ -308,7 +329,7 @@ DocumentoInfo* cargar_documento(char *filename) {
     if (!f) return NULL;
     
     DocumentoInfo *info = (DocumentoInfo*)malloc(sizeof(DocumentoInfo));
-    info->palabras = (char**)malloc(50000 * sizeof(char*)); // Aumentar tamaño por seguridad
+    info->palabras = (char**)malloc(50000 * sizeof(char*));
     info->doc_id = (int*)malloc(50000 * sizeof(int));
     info->num_palabras = 0;
     
@@ -320,7 +341,6 @@ DocumentoInfo* cargar_documento(char *filename) {
             doc_actual++;
         } else {
             if (doc_actual > 0 && doc_actual <= documentos) {
-                // Verificar límites de memoria
                 if (info->num_palabras >= 50000) {
                     printf("Advertencia: Se superó el límite de palabras en DocumentoInfo.\n");
                     break; 
@@ -337,7 +357,7 @@ DocumentoInfo* cargar_documento(char *filename) {
 }
 
 float *vector_intervalos(int posDic, int posDocumento, float **mtx_1, float **mtx_2){
-    float* v = (float*)calloc(temas, sizeof(float)); // Usar calloc para inicializar a 0.0
+    float* v = (float*)calloc(temas, sizeof(float));
     
     if (posDic < 0 || posDic >= palabras_dic) {
         for(int i = 0; i < temas; i++) {
@@ -346,21 +366,18 @@ float *vector_intervalos(int posDic, int posDocumento, float **mtx_1, float **mt
         return v;
     }
     
-
-    float * n_m = n_ms(mtx_1);
-    float * n_k = n_ks(mtx_2);
+    float *n_m = n_ms(mtx_1);
+    float *n_k = n_ks(mtx_2);
     
     for(int i = 0; i < temas; i++){
         float a = mtx_2[i][posDic] + betha;
         float b = n_k[i] + (betha * palabras_dic);
-        float primerCociente = (b > 0) ? (a / b) : 0.0; // P(palabra|tópico)
+        float primerCociente = (b > 0) ? (a / b) : 0.0;
 
-        // Termino de la distribución de tópicos por documento (gamma)
         float a_1 = mtx_1[posDocumento][i] + alfa;
         float b_1 = n_m[posDocumento] + (alfa * temas);
-        float segundoCociente = (b_1 > 0) ? (a_1 / b_1) : 0.0; // P(tópico|documento)
+        float segundoCociente = (b_1 > 0) ? (a_1 / b_1) : 0.0;
 
-        // El vector v[i] es proporcional a P(palabra|tópico) * P(tópico|documento)
         v[i] = primerCociente * segundoCociente; 
     }
     
@@ -370,7 +387,8 @@ float *vector_intervalos(int posDic, int posDocumento, float **mtx_1, float **mt
     return v;
 }
 
-__declspec(dllexport)float** matriz_final(float **mtx_1, float **mtx_2, int n, char *docs){
+__declspec(dllexport) float** matriz_final(float **mtx_1, float **mtx_2, int n, char *docs){
+    inicializar_aleatorio();
     
     int num_palabras_dic_cargado = 0;
     char **diccionario = cargar_diccionario("txts/dic/dic.txt", &num_palabras_dic_cargado);
@@ -388,9 +406,7 @@ __declspec(dllexport)float** matriz_final(float **mtx_1, float **mtx_2, int n, c
         return NULL;
     }
     printf("Documento cargado para remuestreo con %d ocurrencias de palabras.\n", doc_info->num_palabras);
-    //TORNEO DE PVP EL VIERNES A LAS 8pm
-    //CATEGORIAS FREE (GRATIS) Y CAVOID (cuota de 20 pesos)
-    //mas info en el grupo de whatsapp del server
+    
     float **mtx_1_actualizado = (float**)malloc(documentos * sizeof(float*));
     for(int i = 0; i < documentos; i++) {
         mtx_1_actualizado[i] = (float*)calloc(temas, sizeof(float)); 
@@ -415,6 +431,7 @@ __declspec(dllexport)float** matriz_final(float **mtx_1, float **mtx_2, int n, c
     // Array para guardar el tópico asignado a cada ocurrencia de palabra
     int *topic_assignments = (int*)malloc(doc_info->num_palabras * sizeof(int));
     
+    // Inicialización aleatoria
     for (int p = 0; p < doc_info->num_palabras; p++) {
         char *palabra = doc_info->palabras[p];
         int doc_index = doc_info->doc_id[p];
@@ -428,22 +445,20 @@ __declspec(dllexport)float** matriz_final(float **mtx_1, float **mtx_2, int n, c
             mtx_1_actualizado[doc_index][topic]++;
             mtx_2_actualizado[topic][dic_index]++;
         } else {
-            topic_assignments[p] = -1; // Palabra no en diccionario
+            topic_assignments[p] = -1;
         }
     }
     
     // Gibbs Sampling
     for(int iter = 0; iter < n; iter++) {
+        printf("Iteracion Gibbs %d/%d\n", iter + 1, n);
         
         for (int p = 0; p < doc_info->num_palabras; p++) {
-            
             char *palabra = doc_info->palabras[p];
             int doc_index = doc_info->doc_id[p];
             int dic_index = buscar_en_diccionario(palabra, diccionario, num_palabras_dic_cargado);
             
             if (dic_index != -1) {
-                
-
                 int old_topic = topic_assignments[p];
                 
                 if (old_topic != -1) {
@@ -451,7 +466,7 @@ __declspec(dllexport)float** matriz_final(float **mtx_1, float **mtx_2, int n, c
                     mtx_2_actualizado[old_topic][dic_index]--;
                 }
 
-                //calcular distribución de probabilidad para nuevo tópico
+                // Calcular distribución de probabilidad para nuevo tópico
                 float *v = vector_intervalos(dic_index, doc_index, mtx_1_actualizado, mtx_2_actualizado);
                 
                 float suma = 0.0;
@@ -483,7 +498,7 @@ __declspec(dllexport)float** matriz_final(float **mtx_1, float **mtx_2, int n, c
                 
                 free(v);
 
-                //asigna nuevo tópico e incrementar contadores
+                // Asignar nuevo tópico e incrementar contadores
                 if (new_topic != -1) {
                     topic_assignments[p] = new_topic;
                     mtx_1_actualizado[doc_index][new_topic]++;
@@ -493,9 +508,17 @@ __declspec(dllexport)float** matriz_final(float **mtx_1, float **mtx_2, int n, c
         }
     } 
     
+    // Copiar matriz theta actualizada
     for(int k = 0; k < documentos; k++) {
         for(int t = 0; t < temas; t++) {
             mtx_f[k][t] = mtx_1_actualizado[k][t];
+        }
+    }
+
+    // Actualizar matriz phi original
+    for(int t = 0; t < temas; t++) {
+        for(int w = 0; w < palabras_dic; w++) {
+            mtx_2[t][w] = mtx_2_actualizado[t][w];
         }
     }
     
@@ -516,6 +539,7 @@ __declspec(dllexport)float** matriz_final(float **mtx_1, float **mtx_2, int n, c
     
     free(topic_assignments);
 
+    printf("Gibbs sampling completado: %d iteraciones\n", n);
     return mtx_f;
 }
 

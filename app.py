@@ -48,6 +48,8 @@ def inicializar_matrices():
         if resultado_1:
             matriz_1, apuntado = resultado_1
             print(f"✅ Matriz 1 calculada: {matriz_1.shape}")
+            # Debug de la matriz 1
+            c_interface.debug_matriz_distribucion(matriz_1, "Matriz 1 (inicial)")
         else:
             print("❌ Error: matriz_1 es None")
             return False
@@ -57,6 +59,8 @@ def inicializar_matrices():
         if resultado_2:
             matriz_2, apuntado_2 = resultado_2
             print(f"✅ Matriz 2 calculada: {matriz_2.shape}")
+            # Debug de la matriz 2
+            c_interface.debug_matriz_distribucion(matriz_2, "Matriz 2 (inicial)")
         else:
             print("❌ Error: matriz_2 es None")
             return False
@@ -208,7 +212,7 @@ def get_final():
         return jsonify({"error": "Las matrices base no están disponibles"}), 500
     
     try:
-        matrizFinal = c_interface.calcular_matriz_final(
+        matrizFinal, matriz_phi_actualizada = c_interface.calcular_matriz_final(
             apuntado, 
             apuntado_2, 
             repeticiones,
@@ -218,6 +222,11 @@ def get_final():
         
         if matrizFinal is None:
             return jsonify({"error": "No se pudo calcular la matriz iterada"}), 500
+        
+        # Actualizar matriz_2 con la versión actualizada de Gibbs sampling
+        if matriz_phi_actualizada is not None:
+            matriz_2 = matriz_phi_actualizada
+            print("✅ Matriz Phi actualizada después de Gibbs sampling")
         
         return jsonify({
             "datos": matrizFinal.tolist(),
@@ -342,13 +351,17 @@ def get_entropia():
         return jsonify({"error": "No se pudieron calcular las matrices"}), 500
     
     try:
-        # Normalizar matrices
-        theta = matriz_1 / np.sum(matriz_1, axis=1, keepdims=True)
-        phi = matriz_2 / np.sum(matriz_2, axis=1, keepdims=True)
+        # Normalizar matrices con estabilidad numérica
+        theta = matriz_1 / (np.sum(matriz_1, axis=1, keepdims=True) + 1e-12)
+        phi = matriz_2 / (np.sum(matriz_2, axis=1, keepdims=True) + 1e-12)
         
         # Calcular métricas
         entropia = calcular_entropia(theta, phi, n_dv)
         perplexity = calcular_perplexity(entropia)
+        
+        print(f"=== MÉTRICAS BÁSICAS ===")
+        print(f"Entropía: {entropia:.6f}")
+        print(f"Perplejidad: {perplexity:.2f}")
         
         return jsonify({
             "entropia": float(entropia),
@@ -377,7 +390,7 @@ def get_entropia_final():
         if apuntado is None or apuntado_2 is None or n_dv is None:
             return jsonify({"error": "Las matrices base no están disponibles"}), 500
         
-        matrizFinal = c_interface.calcular_matriz_final(
+        matrizFinal, matriz_phi_actualizada = c_interface.calcular_matriz_final(
             apuntado, 
             apuntado_2, 
             repeticiones,
@@ -388,17 +401,39 @@ def get_entropia_final():
         if matrizFinal is None:
             return jsonify({"error": "No se pudo calcular la matriz iterada"}), 500
         
-        # Normalizar theta (documento-tópico)
-        theta = matrizFinal / np.sum(matrizFinal, axis=1, keepdims=True)
+        # Actualizar matriz_2 si hay una versión actualizada
+        if matriz_phi_actualizada is not None:
+            matriz_2 = matriz_phi_actualizada
+            print("Matriz Phi actualizada para cálculo de entropía")
         
-        # Normalizar phi (palabra-tópico)
-        phi = matriz_2 / np.sum(matriz_2, axis=1, keepdims=True)
+        # DEBUG: Verificar matrices antes del cálculo
+        print("=== DEBUG ANTES DE CÁLCULO ENTROPÍA ===")
+        print(f"matrizFinal shape: {matrizFinal.shape}, suma: {np.sum(matrizFinal):.2f}")
+        print(f"matriz_2 shape: {matriz_2.shape}, suma: {np.sum(matriz_2):.2f}")
+        print(f"n_dv shape: {n_dv.shape}, suma: {np.sum(n_dv):.2f}")
+        
+        # Normalizar theta (documento-tópico) con estabilidad numérica
+        theta_sums = np.sum(matrizFinal, axis=1, keepdims=True)
+        theta = matrizFinal / (theta_sums + 1e-12)
+        
+        # Normalizar phi (palabra-tópico) con estabilidad numérica  
+        phi_sums = np.sum(matriz_2, axis=1, keepdims=True)
+        phi = matriz_2 / (phi_sums + 1e-12)
+        
+        # Verificar normalización
+        print(f"Theta normalizado - suma por filas: {np.sum(theta, axis=1)[:5]}")
+        print(f"Phi normalizado - suma por filas: {np.sum(phi, axis=1)[:5]}")
         
         # Calcular entropía
         entropia = calcular_entropia(theta, phi, n_dv)
         
         # Calcular perplejidad
         perplexity = calcular_perplexity(entropia)
+        
+        print(f"=== RESULTADOS ENTROPÍA FINAL ===")
+        print(f"Entropía: {entropia:.6f}")
+        print(f"Perplejidad: {perplexity:.2f}")
+        print(f"Iteraciones: {repeticiones}")
         
         return jsonify({
             "entropia": float(entropia),

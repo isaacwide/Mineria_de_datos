@@ -40,48 +40,47 @@ def calcular_frecuencias_documento_palabra(filename, diccionario_path, num_docum
 
 def calcular_entropia(theta, phi, n_dv):
     """
-    Calcula la entropía del modelo LDA.
+    Calcula la entropía del modelo LDA (cross-entropy).
     
-    Fórmula:
-    log(entropía) = -∑_{d=1}^{D} [∑_{v=1}^{V} n_{d,v} * log(∑_{k=1}^{K} θ_{d,k} * φ_{k,v})] / ∑_{d=1}^{D} N_d
+    Fórmula CORREGIDA:
+    entropía = -∑_{d=1}^{D} [∑_{v=1}^{V} n_{d,v} * log(∑_{k=1}^{K} θ_{d,k} * φ_{k,v})] / ∑_{d=1}^{D} N_d
     
     Args:
-        theta: Matriz documento-tópico (D x K) - matriz_1
-        phi: Matriz palabra-tópico (K x V) - matriz_2 transpuesta
+        theta: Matriz documento-tópico (D x K) - NORMALIZADA (suma por documento = 1)
+        phi: Matriz palabra-tópico (K x V) - NORMALIZADA (suma por tópico = 1)
         n_dv: Matriz de frecuencias documento-palabra (D x V)
     
     Returns:
         float: Valor de entropía
     """
-    D, K = theta.shape  # D = documentos, K = tópicos
-    K, V = phi.shape    # V = vocabulario
+    D, K = theta.shape
+    K_phi, V = phi.shape
+    
+    # Verificar dimensiones
+    if K != K_phi:
+        raise ValueError(f"Dimensiones inconsistentes: theta tiene {K} tópicos, phi tiene {K_phi}")
+    
+    epsilon = 1e-15  # Valor más pequeño para mayor estabilidad
     
     # Calcular N_d (total de palabras por documento)
-    N_d = np.sum(n_dv, axis=1)  # Shape: (D,)
-    total_palabras = np.sum(N_d)
+    N_d = np.sum(n_dv, axis=1)
+    total_palabras_corpus = np.sum(N_d)
     
-    if total_palabras == 0:
+    if total_palabras_corpus == 0:
         return 0.0
     
-    # Calcular ∑_{k=1}^{K} θ_{d,k} * φ_{k,v} para todos los d,v
-    # Producto matricial: theta @ phi = (D x K) @ (K x V) = (D x V)
-    theta_phi = theta @ phi  # Shape: (D, V)
+    # Calcular P(palabra_v | documento_d) = ∑_{k=1}^{K} θ_{d,k} * φ_{k,v}
+    p_word_given_doc = np.dot(theta, phi)
     
-    # Evitar log(0) añadiendo epsilon pequeño
-    epsilon = 1e-10
-    theta_phi = np.maximum(theta_phi, epsilon)
+    # Aplicar logaritmo con estabilidad numérica
+    p_word_given_doc = np.clip(p_word_given_doc, epsilon, 1.0)
+    log_p = np.log(p_word_given_doc)
     
-    # Calcular log(∑_{k=1}^{K} θ_{d,k} * φ_{k,v})
-    log_theta_phi = np.log(theta_phi)  # Shape: (D, V)
+    # Calcular ∑_{v=1}^{V} n_{d,v} * log(P(v|d)) para cada documento
+    sum_n_log_p = np.sum(n_dv * log_p, axis=1)
     
-    # Calcular ∑_{v=1}^{V} n_{d,v} * log(...)
-    suma_interna = np.sum(n_dv * log_theta_phi, axis=1)  # Shape: (D,)
-    
-    # Calcular la suma sobre todos los documentos
-    suma_total = np.sum(suma_interna)
-    
-    # Aplicar fórmula completa con signo negativo y normalización
-    entropia = -suma_total / total_palabras
+    # Sumar sobre todos los documentos y normalizar
+    entropia = -np.sum(sum_n_log_p) / total_palabras_corpus
     
     return float(entropia)
 
@@ -90,7 +89,7 @@ def calcular_perplexity(entropia):
     """
     Calcula la perplejidad a partir de la entropía.
     
-    Perplexity = exp(-entropía)
+    Perplexity = exp(entropía)
     
     Args:
         entropia: Valor de entropía
@@ -98,4 +97,4 @@ def calcular_perplexity(entropia):
     Returns:
         float: Valor de perplejidad
     """
-    return np.exp(-entropia)
+    return np.exp(entropia)

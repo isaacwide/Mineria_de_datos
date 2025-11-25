@@ -73,27 +73,39 @@ def calcular_matriz_final(m1, m2, n_repeticiones, documentos, temas):
 
     print(f"Calculando matriz final con {n_repeticiones} repeticiones...")
     
-    resultado = matriz_final(
+    resultado_theta = matriz_final(
         m1,
         m2,
         n_repeticiones,
         direccion_documento.encode('utf-8')
     )
     
-    if not resultado:
+    if not resultado_theta:
         print("Error: matriz_final retornó NULL")
-        return None
+        return None, None
     
-    matriz = np.zeros((documentos, temas), dtype=np.float32)
+    # 1. Recuperar Matriz Theta (Documentos)
+    matriz_theta_np = np.zeros((documentos, temas), dtype=np.float32)
     try:
         for i in range(documentos):
             for j in range(temas):
-                matriz[i][j] = resultado[i][j]
+                matriz_theta_np[i][j] = resultado_theta[i][j]
     except Exception as e:
-        print(f"Error al copiar datos: {e}")
-        return None
+        print(f"Error al copiar datos Theta: {e}")
+        return None, None
 
-    return matriz
+    # 2. Recuperar Matriz Phi Actualizada (Palabras) desde el puntero m2 original
+    vocabulario_tam = 1022
+    matriz_phi_updated = np.zeros((temas, vocabulario_tam), dtype=np.float32)
+    try:
+        for i in range(temas):
+            for j in range(vocabulario_tam):
+                matriz_phi_updated[i][j] = m2[i][j]
+    except Exception as e:
+        print(f"Error al recuperar datos Phi actualizados: {e}")
+        return matriz_theta_np, None
+
+    return matriz_theta_np, matriz_phi_updated
 
 
 def liberar_matrices(m1, m2, filas_m1, filas_m2):
@@ -138,3 +150,33 @@ def param_sigma(mtx, filas, columnas):
     except Exception as e:
         print(f"Error al copiar datos de sigma: {e}")
         return None
+
+
+def debug_matriz_distribucion(matriz, nombre):
+    """Función para debuguear la distribución de una matriz"""
+    print(f"\n=== DEBUG {nombre} ===")
+    print(f"Shape: {matriz.shape}")
+    print(f"Suma total: {np.sum(matriz):.2f}")
+    
+    # Verificar sumas por filas y columnas
+    sumas_filas = np.sum(matriz, axis=1)
+    sumas_columnas = np.sum(matriz, axis=0)
+    
+    print(f"Suma por filas (primeras 5): {sumas_filas[:5]}")
+    print(f"Suma por columnas (primeras 5): {sumas_columnas[:5]}")
+    print(f"Valores únicos: {len(np.unique(matriz))}")
+    print(f"Rango: [{np.min(matriz):.6f}, {np.max(matriz):.6f}]")
+    print(f"Media: {np.mean(matriz):.6f}")
+    print(f"Desviación estándar: {np.std(matriz):.6f}")
+    # no olvides entrar a mc.buap.pro
+    # Verificar si hay filas con suma cero
+    filas_cero = np.sum(sumas_filas == 0)
+    columnas_cero = np.sum(sumas_columnas == 0)
+    
+    if filas_cero > 0:
+        print(f"⚠️  {filas_cero} filas tienen suma cero!")
+    if columnas_cero > 0:
+        print(f"⚠️  {columnas_cero} columnas tienen suma cero!")
+    
+    # Verificar distribución
+    print(f"Percentiles: 25%={np.percentile(matriz, 25):.6f}, 50%={np.percentile(matriz, 50):.6f}, 75%={np.percentile(matriz, 75):.6f}")
