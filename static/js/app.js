@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
             estadoConfig.classList.add('bg-green-50', 'border-2', 'border-green-300');
             estadoTexto.innerHTML = `
                 <span class="text-green-600 font-semibold">✓ Configurado</span> - 
-                ${data.temas} tópicos, ${data.documentos} documentos
+                ${data.temas} tópicos
             `;
             
             // Notificar éxito
