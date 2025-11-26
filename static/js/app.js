@@ -134,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data2 = await fetchWithErrorHandling(`/api/matrizFinal?repeticiones=${Iteraciones}`, 'matriz final');
             const data3 = await fetchWithErrorHandling('/api/topicosfinal', 'tópicos');
             const data4 = await fetchWithErrorHandling(`/api/entropia-final?repeticiones=${Iteraciones}`, 'entropía');
+            const data5 = await fetchWithErrorHandling(`/api/entropia-progresiva?repeticiones=${Iteraciones}`, 'entropía progresiva');
             
             // Combinar los datos
             const dataCombinada = {
@@ -141,7 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 matriz_2: data1.matriz_2,
                 matriz_final: data2,
                 topicos: data3,
-                metricas: data4
+                metricas: data4,
+                entropia_progresiva: data5
             };
             
             console.log('✅ Todos los datos cargados exitosamente');
@@ -211,6 +213,22 @@ function mostrarMatrices(data) {
                 </p>
             </div>
             
+            <!-- Gráfica de Entropía Progresiva -->
+            <div class="mb-8 bg-gradient-to-br from-green-50 to-teal-50 rounded-xl p-6 border-2 border-green-300 animate-fade-in">
+                <h4 class="text-xl font-bold text-green-800 mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                    </svg>
+                    Evolución de la Entropía
+                </h4>
+                <div class="bg-white rounded-lg p-4 shadow-sm">
+                    <canvas id="entropia-chart"></canvas>
+                </div>
+                <p class="text-gray-600 text-sm mt-3">
+                    Una entropía decreciente indica mejor convergencia del modelo.
+                </p>
+            </div>
+            
             <!-- Tópicos Identificados -->
             <div class="mb-8 bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl p-6 border-2 border-yellow-200 animate-slide-up" style="animation-delay: 0.1s;">
                 <h4 class="text-2xl font-bold text-orange-800 mb-6 flex items-center">
@@ -269,6 +287,11 @@ function mostrarMatrices(data) {
     `;
     
     resultadosDiv.innerHTML = html;
+    
+    // Crear gráfica de entropía después de insertar el HTML
+    setTimeout(() => {
+        crearGraficaEntropia(data);
+    }, 100);
 }
 
 function generarTopicos(topicosData) {
@@ -470,4 +493,119 @@ function generarTablaMatriz(datos, labelFila, labelColumna, limitarColumnas = fa
     html += '</tbody></table>';
     
     return html;
+}
+// Función para crear la gráfica de entropía
+function crearGraficaEntropia(data) {
+    const ctx = document.getElementById('entropia-chart');
+    if (!ctx) {
+        console.error('No se encontró el canvas para la gráfica');
+        return;
+    }
+    
+    // Destruir gráfica anterior si existe
+    if (window.entropiaChart) {
+        window.entropiaChart.destroy();
+    }
+    //YA TE UNISTE A mc.buap.pro ?, pues te estas tardando en hacerlo
+    window.entropiaChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.entropia_progresiva.iteraciones,
+            datasets: [{
+                label: 'Entropía',
+                data: data.entropia_progresiva.entropias,
+                borderColor: 'rgb(16, 185, 129)',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: 'rgb(16, 185, 129)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Convergencia del Modelo LDA',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    padding: {
+                        top: 10,
+                        bottom: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    titleFont: {
+                        size: 14
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            return 'Entropía: ' + context.parsed.y.toFixed(6);
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Iteraciones',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Entropía',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return value.toFixed(4);
+                        }
+                    }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        }
+    });
+    
+    console.log('✅ Gráfica de entropía creada exitosamente');
 }

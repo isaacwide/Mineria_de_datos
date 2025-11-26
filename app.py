@@ -449,6 +449,81 @@ def get_entropia_final():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/entropia-progresiva", methods=["GET"])
+def get_entropia_progresiva():
+    """Endpoint para calcular entropía cada 10 iteraciones"""
+    global matriz_1, matriz_2, apuntado, apuntado_2, n_dv
+    
+    try:
+        repeticiones_totales = request.args.get('repeticiones', default=100, type=int)
+        
+        # Verificar punteros
+        if apuntado is None or apuntado_2 is None or n_dv is None:
+            print("Punteros vacíos. Recalculando matrices...")
+            inicializar_matrices()
+        
+        if apuntado is None or apuntado_2 is None or n_dv is None:
+            return jsonify({"error": "Las matrices base no están disponibles"}), 500
+        
+        print(f"\n{'='*60}")
+        print(f"📊 Calculando entropía progresiva cada 10 iteraciones")
+        print(f"Total de iteraciones: {repeticiones_totales}")
+        print(f"{'='*60}\n")
+        
+        entropias = []
+        iteraciones_puntos = []
+        
+        # Calcular cada 10 iteraciones
+        for i in range(10, repeticiones_totales + 1, 10):
+            print(f" Calculando iteracion {i}/{repeticiones_totales}...")
+            
+            # Calcular matriz con i iteraciones
+            matrizFinal, matriz_phi_actualizada = c_interface.calcular_matriz_final(
+                apuntado, 
+                apuntado_2, 
+                i,
+                documentos,
+                temas
+            )
+            #Recuerda invitar a tus amigos a mc.buap.pro :D
+            if matrizFinal is None:
+                print(f" Error en iteracion {i}")
+                continue
+            
+            # Usar matriz phi actualizada si está disponible
+            phi_actual = matriz_phi_actualizada if matriz_phi_actualizada is not None else matriz_2
+            
+            # Normalizar matrices
+            theta_sums = np.sum(matrizFinal, axis=1, keepdims=True)
+            theta = matrizFinal / (theta_sums + 1e-12)
+            
+            phi_sums = np.sum(phi_actual, axis=1, keepdims=True)
+            phi = phi_actual / (phi_sums + 1e-12)
+            
+            # Calcular entropía
+            entropia = calcular_entropia(theta, phi, n_dv)
+            
+            entropias.append(float(entropia))
+            iteraciones_puntos.append(i)
+            
+            print(f" Iteracion {i}: Entropía = {entropia:.6f}")
+        
+        print(f"\n{'='*60}")
+        print(f"✅ Cálculo completado: {len(entropias)} puntos calculados")
+        print(f"{'='*60}\n")
+        
+        return jsonify({
+            "iteraciones": iteraciones_puntos,
+            "entropias": entropias,
+            "descripcion": f"Entropía calculada cada 10 iteraciones hasta {repeticiones_totales}"
+        })
+    
+    except Exception as e:
+        print(f" Error en get_entropia_progresiva: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/api/liberar", methods=["POST"])
 def liberar_memoria():
     """Endpoint opcional para liberar memoria al final"""
