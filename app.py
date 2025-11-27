@@ -524,9 +524,95 @@ def get_entropia_progresiva():
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
+
+@app.route("/api/entropia-por-topicos", methods=["GET"])
+def get_entropia_por_topicos():
+    global documentos, diccionario, n_dv
+    
+    try:
+        repeticiones = request.args.get('repeticiones', default=100, type=int)
+        topico_max = request.args.get('topico_max', default=100, type=int)
+        
+        print(f"\n{'='*60}")
+        print(f"📊 Calculando entropía variando tópicos")
+        print(f"Iteraciones fijas: {repeticiones}")
+        print(f"Tópicos: 10, 30, 50, ..., {topico_max}")
+        print(f"{'='*60}\n")
+        
+        entropias = []
+        topicos_puntos = []
+        
+        # Calcular para cada cantidad de tópicos
+        for num_topicos in range(10, topico_max + 1, 20):
+            print(f"🔄 Calculando con {num_topicos} tópicos...")
+            
+            c_interface.iniciar_variables(documentos, num_topicos, diccionario)
+            
+            resultado_1 = c_interface.matriz_topic_word(filename1, filename2, documentos, num_topicos)
+            resultado_2 = c_interface.matriz_dic_topic(filename1, filename3, diccionario, num_topicos)
+            
+            if not resultado_1 or not resultado_2:
+                print(f"⚠️ Error calculando matrices para {num_topicos} tópicos")
+                continue
+            
+            matriz_theta_inicial, apuntado_temp = resultado_1
+            matriz_phi_inicial, apuntado_2_temp = resultado_2
+            
+            if n_dv is None:
+                n_dv = calcular_frecuencias_documento_palabra(filename1, filename3, documentos, diccionario)
+            
+            matrizFinal, matriz_phi_actualizada = c_interface.calcular_matriz_final(
+                apuntado_temp,
+                apuntado_2_temp,
+                repeticiones,
+                documentos,
+                num_topicos
+            )
+            
+            if matrizFinal is None:
+                print(f"⚠️ Error calculando matriz final para {num_topicos} tópicos")
+                c_interface.liberar_matrices(apuntado_temp, apuntado_2_temp, documentos, num_topicos)
+                continue
+            
+            # Usar matriz phi actualizada si está disponible
+            phi_actual = matriz_phi_actualizada if matriz_phi_actualizada is not None else matriz_phi_inicial
+            
+            # Normalizar matrices
+            theta_sums = np.sum(matrizFinal, axis=1, keepdims=True)
+            theta = matrizFinal / (theta_sums + 1e-12)
+            
+            phi_sums = np.sum(phi_actual, axis=1, keepdims=True)
+            phi = phi_actual / (phi_sums + 1e-12)
+            
+            # Calcular entropía
+            entropia = calcular_entropia(theta, phi, n_dv)
+            
+            entropias.append(float(entropia))
+            topicos_puntos.append(num_topicos)
+            
+            print(f"✅ {num_topicos} tópicos: Entropía = {entropia:.6f}")
+            
+            # Liberar memoria temporal
+            c_interface.liberar_matrices(apuntado_temp, apuntado_2_temp, documentos, num_topicos)
+        
+        print(f"\n{'='*60}")
+        print(f"✅ Cálculo completado: {len(entropias)} puntos calculados")
+        print(f"{'='*60}\n")
+        
+        return jsonify({
+            "topicos": topicos_puntos,
+            "entropias": entropias,
+            "descripcion": f"Entropía calculada variando tópicos de 20 en 20 hasta {topico_max} (con {repeticiones} iteraciones)"
+        })
+    
+    except Exception as e:
+        print(f"❌ Error en get_entropia_por_topicos: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/api/liberar", methods=["POST"])
 def liberar_memoria():
-    """Endpoint opcional para liberar memoria al final"""
     global apuntado, apuntado_2
     
     try:

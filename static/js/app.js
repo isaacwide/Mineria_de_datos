@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const data2 = await fetchWithErrorHandling(`/api/matrizFinal?repeticiones=${Iteraciones}`, 'matriz final');
             const data3 = await fetchWithErrorHandling('/api/topicosfinal', 'tópicos');
             const data4 = await fetchWithErrorHandling(`/api/entropia-final?repeticiones=${Iteraciones}`, 'entropía');
-            const data5 = await fetchWithErrorHandling(`/api/entropia-progresiva?repeticiones=${Iteraciones}`, 'entropía progresiva');
+            const data5 = await fetchWithErrorHandling(`/api/entropia-por-topicos?repeticiones=${Iteraciones}&topico_max=300`, 'entropía por tópicos');
             
             // Combinar los datos
             const dataCombinada = {
@@ -510,7 +510,7 @@ function crearGraficaEntropia(data) {
     window.entropiaChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: data.entropia_progresiva.iteraciones,
+            labels: data.entropia_progresiva.topicos,
             datasets: [{
                 label: 'Entropía',
                 data: data.entropia_progresiva.entropias,
@@ -541,7 +541,7 @@ function crearGraficaEntropia(data) {
                 },
                 title: {
                     display: true,
-                    text: 'Convergencia del Modelo LDA',
+                    text: 'Entropía del Modelo LDA según Número de Tópicos',
                     font: {
                         size: 16,
                         weight: 'bold'
@@ -571,7 +571,7 @@ function crearGraficaEntropia(data) {
                 x: {
                     title: {
                         display: true,
-                        text: 'Iteraciones',
+                        text: 'Número de Tópicos (K)',
                         font: {
                             size: 14,
                             weight: 'bold'
